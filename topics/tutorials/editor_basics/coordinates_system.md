@@ -1,6 +1,8 @@
-[//]: # (title: 2. Editor Coordinates System. Positions and Offsets)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 2. Editor Coordinates System. Positions and Offsets
+
+<link-summary>Tutorial demonstrating how to access editor coordinate system.</link-summary>
 
 The previous tutorial [Working with Text](working_with_text.md) demonstrated how to use actions to access a caret placed in a document open in an editor.
 The examples replaced selected text in a document by using information about the caret.
@@ -10,17 +12,17 @@ This tutorial describes how to access information about the caret(s) in an edito
 
 ## Editor Basics Code Sample
 
-In this tutorial, the [editor_basics](%gh-sdk-samples%/editor_basics) code sample is used to explore caret positions.
+In this tutorial, the [editor_basics](%gh-sdk-samples-master%/editor_basics) code sample is used to explore caret positions.
 In particular, the **Caret Position** action added by `editor_basics` to the editor context menu is used to retrieve information about the current caret position.
 A keyboard shortcut can also initiate the action.
 
 ![Editor Basics Menu](basics.png){width="600"}
 
-The source code for the Java class behind the menu action is [EditorAreaIllustration](%gh-sdk-samples%/editor_basics/src/main/java/org/intellij/sdk/editor/EditorAreaIllustration.java).
+The source code for the Java class behind the menu action is [EditorAreaIllustration](%gh-sdk-samples-master%/editor_basics/src/main/java/org/intellij/sdk/editor/EditorAreaIllustration.java).
 The focus of discussion will be the `EditorAreaIllustration.actionPerformed()` method.
 For more information about creating action classes, see the [Actions Tutorial](action_system.md), which covers the topic in depth.
 
-## Caret Positions from the CaretModel and Caret Objects
+## Caret Positions from the `CaretModel` and `Caret` Objects
 
 The properties of a caret can be accessed by obtaining an instance of the [`CaretModel`](%gh-ic%/platform/editor-ui-api/src/com/intellij/openapi/editor/CaretModel.java) object.
 As in the [Working with Text](working_with_text.md) tutorial, the `AnActionEvent` is used to get the `Editor` object.
@@ -145,8 +147,6 @@ For the Visual Position the caret leans right, indicating its association with t
 
 ![Caret Column Position - Block Caret](caret_col_pos_block.png){width="800"}
 
-<br/>
-
 Consider the Java snippet below, and use the `editor_basics` **Caret Position** action to report caret information at each step.
 Be sure to use the keyboard shortcut to invoke the action so that the caret position is not disturbed.
 
@@ -182,7 +182,7 @@ The caret Offset includes:
 * The first (0th) character in a document.
 * Whitespace characters, including newline and tabs.
 * Any characters after end-of-line if the IDE settings permit them.
-  (<menupath>Settings/Preferences | Editor | General | Virtual Space</menupath>)
+  (<ui-path>Settings | Editor | General | Virtual Space</ui-path>)
 * The character selected by the caret.
 
 The example below demonstrates the Offset of a caret placed at the first character of Logical line one.

@@ -1,3 +1,4 @@
+// Copyright 2000-2023 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package org.intellij.sdk.language;
 
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
@@ -10,7 +11,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SimpleDocumentationProvider extends AbstractDocumentationProvider {
+/**
+ * TODO Please note, it is recommended to utilize the new DocumentationTarget API for
+ * plugins targeting IntelliJ Platform version 2023.1 or later.
+ *
+ * @see <a href="https://plugins.jetbrains.com/docs/intellij/documentation.html">Documentation (IntelliJ Platform Docs)</a>
+ */
+final class SimpleDocumentationProvider extends AbstractDocumentationProvider {
 
   /**
    * For the Simple Language, we don't have online documentation. However, if your language provides

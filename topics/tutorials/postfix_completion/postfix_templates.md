@@ -1,8 +1,8 @@
-[//]: # (title: Postfix Templates)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+# Postfix Templates
 
-<excerpt>Postfix templates implement possibility to modify or wrap the existing code in additional constructs without navigating the caret back.</excerpt>
+<link-summary>Postfix templates implement possibility to modify or wrap the existing code in additional constructs without navigating the caret back.</link-summary>
 
 The IntelliJ Platform allows plugins to provide custom postfix templates specific to the supported languages, frameworks, or libraries.
 
@@ -34,21 +34,28 @@ class and implementing the key methods:
 
 > See the [](advanced_postfix_templates.md) section for information on how to implement postfix templates with more advanced features and editing possibilities.
 >
-{type="note"}
+{style="note"}
 
 ## Postfix Template Description
 
 All postfix templates must provide descriptions and examples showing the code before and after a template is expanded.
-The files describing the template must be placed in the plugin's <path>resources</path> in the <path>postfixTemplates/_$TEMPLATE_NAME$_</path> where the _$TEMPLATE_NAME$_ directory must match the simple name of the template class,
+The files describing the template must be placed in the plugin's <path>resources</path> in the <path>postfixTemplates/\$TEMPLATE_NAME\$</path> where the _\$TEMPLATE_NAME\$_ directory must match the simple name of the template class,
 e.g., for a template implemented in `com.example.IntroduceVariablePostfixTemplate` class, the directory name should be named as <path>IntroduceVariablePostfixTemplate</path>.
 
 Providing the description explaining the template purpose and context details is achieved by creating the <path>description.html</path> file.
 
-Providing the code snippets showing the template in "before" and "after" expanding states is achieved via the <path>before._$EXTENSION$_.template</path> and <path>after._$EXTENSION$_.template</path> files accordingly.
-The _$EXTENSION$_ placeholder should be replaced with the extension of the template language, e.g., <path>before.kt.template</path> for a Kotlin template.
+Providing the code snippets showing the template in "before" and "after" expanding states is achieved via the <path>before.\$EXTENSION\$.template</path> and <path>after.\$EXTENSION\$.template</path> files accordingly.
+The _\$EXTENSION\$_ placeholder should be replaced with the extension of the template language, e.g., <path>before.kt.template</path> for a Kotlin template.
+
+> If a plugin project is multi-module, and it combines resources into a single JAR, make sure that all template description files have unique names or paths.
+> Otherwise, only the last packed description file will exist in the distribution package.
+>
+{style="warning"}
+
+> See the [](providing_translations.md#bundled-translations) section for information about how to provide postfix template description translations in plugins.
 
 The code snippets included in the example files can use the `<spot>` marker, which should surround the most important code parts, e.g., expression to expand and position of the caret after expanding.
-Marked parts will be highlighted in the <menupath>Settings/Preferences | Editor | General | Postfix Completion</menupath> settings page, making it easier for users to understand how a template is expanded, e.g.:
+Marked parts will be highlighted in the <ui-path>Settings | Editor | General | Postfix Completion</ui-path> settings page, making it easier for users to understand how a template is expanded, e.g.:
 - <path>before.java.template</path>:
   ```java
   <spot>cart.getProducts()</spot>.var
@@ -61,7 +68,7 @@ Marked parts will be highlighted in the <menupath>Settings/Preferences | Editor 
 
 Template example files can also use the `$key` placeholder which is replaced with the actual template key in the preview UI, e.g., consider a template with the `var` key:
 
-<compare title-before="Content" title-after="Rendition">
+<compare first-title="Content" second-title="Rendition">
 
 ```java
 cart.getProducts()$key

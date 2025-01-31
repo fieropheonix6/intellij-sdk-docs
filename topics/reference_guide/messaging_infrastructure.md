@@ -1,193 +1,372 @@
-[//]: # (title: Messaging Infrastructure)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Messaging Infrastructure
 
-## Purpose
+<link-summary>Subscribing and publishing messages via message bus.</link-summary>
 
-The purpose of this document is to introduce the messaging infrastructure available in the IntelliJ Platform to developers and plugin writers.
-It is intended to answer why, when and how to use it.
+IntelliJ Platform's messaging infrastructure is an implementation of [Publisher Subscriber Pattern](https://w.wiki/5xaV) that provides additional features like _broadcasting on hierarchy_ and special _nested events_ processing (a _nested event_ is an event directly or indirectly fired from the callback of another event).
 
-## Rationale
-
-So, what is messaging in the IntelliJ Platform and why do we need it? Basically, its implementation of [Publisher Subscriber Pattern](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern){interpolate-variables="false"} that provides additional features like _broadcasting on hierarchy_ and special _nested events_ processing (_nested event_ here is a situation when new event is fired (directly or indirectly) from the callback of another event).
+> All available listeners/topics are listed on [](intellij_platform_extension_point_list.md) under _Listeners_ sections.
 
 ## Design
 
-Here are the main components of the messaging API.
+The following sections describe the main components of the messaging API:
+- [Topic](#topic)
+- [Message Bus](#message-bus)
+- [Connection](#connection)
 
 ### Topic
 
-This class serves as an endpoint at the messaging infrastructure.
-I.e., clients are allowed to subscribe to a specific topic within a bus and send messages to that topic within that particular bus.
+The [`Topic`](%gh-ic%/platform/extensions/src/com/intellij/util/messages/Topic.java) class serves as an endpoint at the messaging infrastructure.
+Clients are allowed to subscribe to a specific topic within a bus and send messages to that topic within that particular bus.
+To clarify the corresponding message bus, a `Topic` field declaration should be annotated with `@Topic.AppLevel` and/or `@Topic.ProjectLevel`.
 
-![Topic](topic.svg)
+```plantuml
+@startuml
 
-* *display name* just a human-readable name used for logging/monitoring purposes;
-* *broadcast direction* will be explained in details at Broadcasting. Default value is *TO\_CHILDREN*;
-* *listener class* that is a business interface for particular topic.
+skinparam monochrome true
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+skinparam classAttributeIconSize 0
+hide empty fields
+hide empty methods
+
+left to right direction
+
+class "com.intellij.util.messages.Topic" as Topic {
+  +getDisplayName()
+  +getBroadcastDirection()
+}
+
+class ListenerClass {
+  +method1()
+  {method} ...
+  +methodN()
+}
+
+Topic o--> "1 " ListenerClass
+
+@enduml
+```
+
+#### Topic Properties
+
+Display name
+: Human-readable name used for logging/monitoring purposes.
+
+Broadcast direction
+: See [](#broadcasting) for more details. The default value is `TO_CHILDREN`.
+
+Listener class
+: A business interface for a particular topic.
   Subscribers register an implementation of this interface at the messaging infrastructure.
   Publishers later retrieve objects that conform to the interface (IS-A) and call any methods defined on those implementations.
-  The messaging infrastructure takes care of dispatching the message to all subscribers of the topic by calling the same method with the same arguments on the registered implementation callbacks;
-
-To clarify corresponding message bus, `Topic` field declaration can be annotated with `com.intellij.util.messages.Topic.AppLevel` and `com.intellij.util.messages.Topic.ProjectLevel`, respectively.
-
-> All available listeners/topics are listed on [](extension_point_list.md) under _Listeners_ sections.
->
-{type="tip"}
+  The messaging infrastructure takes care of dispatching the message to all subscribers of the topic by calling the same method with the same arguments on the registered implementation callbacks.
 
 ### Message Bus
 
-Is the core of the messaging system.
-Is used at the following scenarios:
+[`MessageBus`](%gh-ic%/platform/extensions/src/com/intellij/util/messages/MessageBus.kt) is the core of the messaging system.
+It is used in the following scenarios:
 
-![Bus](bus.svg)
+```plantuml
+@startuml
+
+skinparam monochrome true
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+
+:Subscriber:
+(Create connection) as (C)
+note top of (C): Necessary for subscribing
+Subscriber --> C
+
+:Publisher:
+(Publish)
+Publisher --> Publish
+
+@enduml
+```
 
 ### Connection
 
-Manages all subscriptions for particular client within particular bus.
+Connection is represented by [`MessageBusConnection`](%gh-ic%/platform/extensions/src/com/intellij/util/messages/MessageBusConnection.kt) class and manages all subscriptions for a particular client within a particular bus.
 
-![Connection](connection.svg)
+```plantuml
+@startuml
 
-* keeps number of *topic handler* mappings (callbacks to invoke when message for the target topic is received)
-  *Note*: not more than one handler per-topic within the same connection is allowed;
-* it's possible to specify *default handler* and subscribe to the target topic without explicitly provided callback.
-  Connection will use that *default handler* when storing *(topic-handler)* mapping;
-* it's possible to explicitly release acquired resources (*disconnect()* method).
-  Also it can be plugged to standard semi-automatic disposing ([`Disposable`](%gh-ic%/platform/util/src/com/intellij/openapi/Disposable.java));
+skinparam monochrome true
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+hide empty members
+hide circle
 
-### Putting Altogether
+class MessageBus
+class MessageBusConnection
+class "Default Handler" as DH
+class "(Topic-Handler)" as TH
 
-*Defining business interface and topic*
+MessageBus "1" o-- "*" MessageBusConnection
+MessageBusConnection o-- "0..1" DH
+MessageBusConnection *-- "*" TH
+
+@enduml
+```
+
+Connection stores *topic-handler* mappings - callbacks to invoke when message for the target topic is received (not more than one handler per topic within the same connection is allowed).
+
+It's possible to specify *default handler* and subscribe to the target topic without explicitly provided callback.
+Connection will use that *default handler* when storing a topic-handler mapping.
+
+It's possible to explicitly release acquired resources (see `disconnect()`).
+Also, it can be plugged to standard semi-automatic disposing ([`Disposable`](%gh-ic%/platform/util/src/com/intellij/openapi/Disposable.java)).
+
+## Messaging API Usage
+
+The sample below assumes a Project-level topic.
+
+### Defining a Business Interface and a Topic
+
+Create an interface with the business methods and a topic field bound to the business interface:
 
 ```java
 public interface ChangeActionNotifier {
 
-    Topic<ChangeActionNotifier> CHANGE_ACTION_TOPIC = Topic.create("custom name", ChangeActionNotifier.class);
+  @Topic.ProjectLevel
+  Topic<ChangeActionNotifier> CHANGE_ACTION_TOPIC =
+      Topic.create("custom name", ChangeActionNotifier.class);
 
-    void beforeAction(Context context);
-    void afterAction(Context context);
+  void beforeAction(Context context);
+  void afterAction(Context context);
 }
 ```
 
-*Subscribing*
+### Subscribing to a Topic
 
-![Subscribing](subscribe.svg)
+```plantuml
+@startuml
 
-> If targeting 2019.3 or later, use [declarative registration](plugin_listeners.md) if possible.
+skinparam monochrome true
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+skinparam DefaultTextAlignment center
+skinparam ActivityBorderThickness 1
+
+left to right direction
+
+' Define the activity
+(*) --> if "" then
+  --> [no connection] "Get a message\nbus reference"
+  --> "Create\na connection\nto the bus"
+  --> "Subscribe"
+else
+  --> [connection exists] "Subscribe"
+endif
+--> (*)
+@enduml
+```
+
+> If targeting 2019.3 or later, use [declarative registration](plugin_listeners.md) whenever possible.
 >
-{type="note"}
+{style="note"}
 
 ```java
-public void init(MessageBus bus) {
-    bus.connect().subscribe(ActionTopics.CHANGE_ACTION_TOPIC, new ChangeActionNotifier() {
+project.getMessageBus().connect().subscribe(
+    ChangeActionNotifier.CHANGE_ACTION_TOPIC,
+    new ChangeActionNotifier() {
         @Override
         public void beforeAction(Context context) {
-            // Process 'before action' event.
+          // Process 'before action' event.
         }
         @Override
         public void afterAction(Context context) {
-            // Process 'after action' event.
+          // Process 'after action' event.
         }
-    });
-}
+});
 ```
 
-*Publishing*
+`MessageBus` instances are available via [`ComponentManager.getMessageBus()`](%gh-ic%/platform/extensions/src/com/intellij/openapi/components/ComponentManager.java).
+Many standard interfaces implement returning a message bus, e.g., [`Application.getMessageBus()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/application/Application.java) and [`Project.getMessageBus()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/project/Project.java).
 
-![Publishing](publish.svg)
+### Publishing Messages
+
+```plantuml
+@startuml
+
+skinparam monochrome true
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+skinparam DefaultTextAlignment center
+skinparam ActivityBorderThickness 1
+
+left to right direction
+
+' Define the activity
+(*) --> "Get message\nbus reference"
+  --> "Ask the bus\nfor a particular\ntopic's publisher"
+  --> "Call target\nmethod on\npublisher"
+  --> "Messaging calls\nthe same method\non target handlers"
+--> (*)
+@enduml
+```
 
 ```java
 public void doChange(Context context) {
-    ChangeActionNotifier publisher = myBus.syncPublisher(ActionTopics.CHANGE_ACTION_TOPIC);
-    publisher.beforeAction(context);
-    try {
-        // Do action
-        // ...
-    } finally {
-        publisher.afterAction(context)
-    }
+  ChangeActionNotifier publisher = project.getMessageBus()
+      .syncPublisher(ChangeActionNotifier.CHANGE_ACTION_TOPIC);
+  publisher.beforeAction(context);
+  try {
+    // do action
+  } finally {
+    publisher.afterAction(context);
+  }
 }
 ```
-
-*Existing resources*
-
-* *MessageBus* instances are available via [`ComponentManager.getMessageBus()`](%gh-ic%/platform/extensions/src/com/intellij/openapi/components/ComponentManager.java)
-  Many standard interfaces implement a message bus, e.g., [`Application`](%gh-ic%/platform/core-api/src/com/intellij/openapi/application/Application.java) and [`Project`](%gh-ic%/platform/core-api/src/com/intellij/openapi/project/Project.java).
-* A number of public topics are used by the IntelliJ Platform, e.g., [`AppTopics`](%gh-ic%/platform/platform-api/src/com/intellij/AppTopics.java), [`ProjectTopics`](%gh-ic%/platform/projectModel-api/src/com/intellij/ProjectTopics.java), etc.
-  So, it's possible to subscribe to them in order to receive information about the processing.
 
 ## Broadcasting
 
 Message buses can be organised into hierarchies.
 Moreover, the IntelliJ Platform has them already:
 
-![Standard hierarchy](standard_hierarchy.svg)
+```plantuml
+@startuml
+
+skinparam monochrome true
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+hide empty members
+hide circle
+
+left to right direction
+
+' Define the objects in the diagram
+class "application bus" as AB
+class "project bus" as PB
+class "module bus" as MB
+
+' Define the class relationships
+AB o-- "*" PB
+PB o-- "*" MB
+@enduml
+```
 
 That allows to notify subscribers registered in one message bus on messages sent to another message bus.
 
-*Example:*
+Example setup:
 
-![Parent-child broadcast](parent_child_broadcast.svg)
+```plantuml
+@startuml
 
-Here we have a simple hierarchy (*application bus* is a parent of *project bus*) with three subscribers for the same topic.
+skinparam monochrome true
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+hide empty members
+hide circle
+top to bottom direction
 
-We get the following if *topic1* defines broadcast direction as *TO\_CHILDREN*:
-1. A message is sent to *topic1* via *application bus*;
-2. *handler1* is notified about the message;
-3. The message is delivered to the subscribers of the same topic within *project bus* (*handler2* and *handler3*);
+class "application bus" as AB
+class "project bus" as PB
+class "connection1" as C1
 
-*Benefits*
+class "connection2" as C2
+class "connection3" as C3
+class "topic1-handler1" as T1H1
 
-We don't need to bother with memory management of subscribers that are bound to child buses but interested in parent bus-level events.
+class "topic1-handler2" as T1H2
+class "topic1-handler3" as T1H3
 
-Consider the example above we may want to have project-specific functionality that reacts to the application-level events.
+AB o-- PB
+AB *-- C1
+
+PB *-- C2
+PB *-- C3
+C1 *-- T1H1
+
+C2 *-- T1H2
+C3 *-- T1H3
+
+@enduml
+```
+
+The example setup presents a simple hierarchy (the *application bus* is a parent of the *project bus*) with three subscribers for the same topic.
+
+If *topic1* defines broadcast direction as `TO_CHILDREN`, we get the following:
+1. A message is sent to *topic1* via *application bus*.
+2. *handler1* is notified about the message.
+3. The message is delivered to the subscribers of the same topic within *project bus* (*handler2* and *handler3*).
+
+The main benefit of broadcasting is managing subscribers that are bound to child buses but interested in parent bus-level events.
+In the example above, we may want to have project-specific functionality that reacts to the application-level events.
 All we need to do is to subscribe to the target topic within the *project bus*.
 No hard reference to the project-level subscriber will be stored at application-level then, i.e., we just avoided memory leak on project re-opening.
-
-*Options*
 
 Broadcast configuration is defined per-topic.
 The following options are available:
 
-* TO\_CHILDREN_ (default);
-* _NONE_;
-* _TO\_PARENT_;
+- `TO_CHILDREN` (default)
+- `TO_DIRECT_CHILDREN`
+- `NONE`
+- `TO_PARENT`
+
+See [`Topic.BroadcastDirection`](%gh-ic%/platform/extensions/src/com/intellij/util/messages/Topic.java) for detailed description of each option.
 
 ## Nested Messages
 
 _Nested message_ is a message sent (directly or indirectly) during another message processing.
-The IntelliJ Platform's Messaging infrastructure guarantees that all messages sent to particular topic will be delivered at the sending order.
+The IntelliJ Platform's messaging infrastructure guarantees that all messages sent to particular topic will be delivered at the sending order.
 
-*Example:*
+Consider the following configuration:
 
-Suppose we have the following configuration:
+```plantuml
+@startuml
 
-![Nested messages](nested_config.svg)
+skinparam DefaultFontName JetBrains Sans
+skinparam DefaultFontSize 14
+hide empty members
+hide circle
 
-Let's see what happens if someone sends a message to the target topic:
+top to bottom direction
 
-* _message1_ is sent;
-* _handler1_ receives _message1_ and sends _message2_ to the same topic;
-* _handler2_ receives _message1_;
-* _handler2_ receives _message2_;
-* _handler1_ receives _message2_;
+class "bus" as B
 
-## Tips'n'tricks
+class "connection1" as C1
+class "connection2" as C2
+
+class "topic-handler1" as TH1
+class "topic-handler2" as TH2
+
+
+B *-- C1
+B *-- C2
+
+C1 *-- TH1
+C2 *-- TH2
+@enduml
+```
+
+When a message is sent to the target topic, the following happens:
+
+- _message1_ is sent
+- _handler1_ receives _message1_ and sends _message2_ to the same topic
+- _handler2_ receives _message1_
+- _handler2_ receives _message2_
+- _handler1_ receives _message2_
+
+## Tips and Tricks
 
 ### Relief Listeners Management
 
-Messaging infrastructure is very light-weight, so, it's possible to reuse it at local sub-systems in order to relieve [Subscribers](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern){interpolate-variables="false"} construction.
+Messaging infrastructure is very light-weight, so it's possible to reuse it at local sub-systems in order to relieve [Subscribers](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern){ignore-vars="true"} construction.
 Let's see what is necessary to do then:
 
-1. Define business interface to work with;
-2. Create shared message bus and topic that uses the interface above (_shared_ here means that either _subject_ or _subscribers_ know about them);
+1. Define business interface to work with.
+2. Create shared message bus and topic that uses the interface above (_shared_ here means that either _subject_ or _subscribers_ know about them).
 
-Let's compare that with a manual implementation:
+A manual implementation would require:
 
-1. Define listener interface (business interface);
-2. Provide reference to the _subject_ to all interested listeners;
-3. Add listeners storage and listeners management methods (add/remove) to the _subject_;
-4. Manually iterate all listeners and call target callback in all places where new event is fired;
+1. Define listener interface (business interface).
+2. Provide reference to the _subject_ to all interested listeners.
+3. Add listeners storage and listeners management methods (add/remove) to the _subject_.
+4. Manually iterate all listeners and call target callback in all places where new event is fired.
 
 ### Avoid Shared Data Modification from Subscribers
 
@@ -211,6 +390,6 @@ We had the following then:
 7. _message2_ is sent by one of the standard document listeners to another topic within the same message bus during _before change_ processing;
 8. the bus tries to deliver all pending messages before queuing _message2_;
 9. _subscriber2_ receives _message1_ and also modifies a document;
-10. the call stack is unwinded and _actual change_ phase of document modification operation requested by _subscriber1_ begins;
+10. the call stack is unwound and _actual change_ phase of document modification operation requested by _subscriber1_ begins;
 
 **The problem** is that document range used by _subscriber1_ for initial modification request is invalid if _subscriber2_ has changed document's range before it.

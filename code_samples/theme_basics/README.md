@@ -1,12 +1,12 @@
 # Theme Basics [![JetBrains IntelliJ Platform SDK Docs](https://jb.gg/badges/docs.svg)][docs]
-*Reference: [Creating Custom UI Themes in IntelliJ SDK Docs][docs:themes]*
+*Reference: [Creating Custom Themes in IntelliJ SDK Docs][docs:themes]*
 
 ## Quickstart
 
-Custom UI Themes are available beginning in version 2019.1.
+Custom themes are available beginning in version 2019.1.
 
-Creating a custom UI Theme is a process of choosing a base IDE Theme (Light or Darcula) then changing aspects of the base Theme definition.
-Custom UI Themes can:
+Creating a custom theme is a process of choosing a base IDE Theme (Light or Darcula) then changing aspects of the base Theme definition.
+Custom themes can:
 - substitute icons,
 - change the colors of icons and UI controls,
 - alter the borders and insets of UI controls,
@@ -30,9 +30,9 @@ It describes definitions of the actions, extensions, or listeners provided by th
 
 
 [docs]: https://plugins.jetbrains.com/docs/intellij/
-[docs:themes]: https://plugins.jetbrains.com/docs/intellij/themes.html
+[docs:themes]: https://plugins.jetbrains.com/docs/intellij/themes-getting-started.html
 [docs:ep]: https://plugins.jetbrains.com/docs/intellij/plugin-extensions.html
-[docs:devkit]: https://plugins.jetbrains.com/docs/intellij/using-dev-kit.html
+[docs:devkit]: https://plugins.jetbrains.com/docs/intellij/developing-themes.html
 [docs:plugin.xml]: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html
 
 [file:plugin.xml]: ./resources/META-INF/plugin.xml

@@ -1,8 +1,8 @@
-[//]: # (title: Advanced Postfix Templates)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+# Advanced Postfix Templates
 
-<excerpt>Advanced postfix templates provide additional features like editing possibilities, expression selector, etc.</excerpt>
+<link-summary>Advanced postfix templates provide additional features like editing possibilities, expression selector, etc.</link-summary>
 
 While [simple templates](postfix_templates.md) can be handled by extending
 [`PostfixTemplate`](%gh-ic%/platform/lang-impl/src/com/intellij/codeInsight/template/postfix/templates/PostfixTemplate.java)
@@ -37,13 +37,13 @@ The IntelliJ Platform-based IDEs provide the [Live Templates](https://www.jetbra
 It allows defining a template text with dynamic expressions, replaced with actual values depending on the context.
 If the implemented postfix template's expanding behavior can be achieved with the live template syntax, it is much easier to extend the
 [`StringBasedPostfixTemplate`](%gh-ic%/platform/lang-impl/src/com/intellij/codeInsight/template/postfix/templates/StringBasedPostfixTemplate.java)
-than implementing the expansion behavior programmatically.
+rather than implementing the expansion behavior programmatically.
 
 **Example:** [`StreamPostfixTemplate`](%gh-ic%/java/java-impl/src/com/intellij/codeInsight/template/postfix/templates/StreamPostfixTemplate.java) wraps array expression within the `Arrays.stream()` method.
 
 > See the [](live_templates.md) section in SDK Docs for information on implementing the live templates feature in a plugin.
 >
-{type="note"}
+{style="note"}
 
 ## Editable Postfix Templates
 
@@ -86,7 +86,7 @@ Implementing template, editor, and serialization methods from scratch is a tedio
 
 Existing
 [`Surrounder`](%gh-ic%/platform/lang-api/src/com/intellij/lang/surroundWith/Surrounder.java)
-implementations of the [](surround_with.md) feature required to invoke the <menupath>Code | Surround With...</menupath> action can be reused for postfix completion by extending the
+implementations of the [](surround_with.md) feature required to invoke the <ui-path>Code | Surround With...</ui-path> action can be reused for postfix completion by extending the
 [`SurroundPostfixTemplateBase`](%gh-ic%/platform/lang-impl/src/com/intellij/codeInsight/template/postfix/templates/SurroundPostfixTemplateBase.java)
 class and returning the surrounder object from the `getSurrounder()` method.
 

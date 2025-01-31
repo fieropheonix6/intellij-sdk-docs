@@ -1,4 +1,4 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 
 package org.intellij.sdk.language;
 
@@ -13,7 +13,6 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase;
 import com.intellij.usageView.UsageInfo;
-import com.intellij.util.containers.ContainerUtil;
 import org.intellij.sdk.language.psi.SimpleProperty;
 
 import java.util.Collection;
@@ -39,7 +38,7 @@ public class SimpleCodeInsightTest extends LightJavaCodeInsightFixtureTestCase {
 
   public void testAnnotator() {
     myFixture.configureByFiles("AnnotatorTestData.java", "DefaultTestData.simple");
-    myFixture.checkHighlighting(false, false, true, true);
+    myFixture.checkHighlighting(false, false, false, true);
   }
 
   public void testFormatter() {
@@ -47,10 +46,10 @@ public class SimpleCodeInsightTest extends LightJavaCodeInsightFixtureTestCase {
     CodeStyle.getLanguageSettings(myFixture.getFile()).SPACE_AROUND_ASSIGNMENT_OPERATORS = true;
     CodeStyle.getLanguageSettings(myFixture.getFile()).KEEP_BLANK_LINES_IN_CODE = 2;
     WriteCommandAction.writeCommandAction(getProject()).run(() ->
-            CodeStyleManager.getInstance(getProject()).reformatText(
-                    myFixture.getFile(),
-                    ContainerUtil.newArrayList(myFixture.getFile().getTextRange())
-            )
+        CodeStyleManager.getInstance(getProject()).reformatText(
+            myFixture.getFile(),
+            List.of(myFixture.getFile().getTextRange())
+        )
     );
     myFixture.checkResultByFile("DefaultTestData.simple");
   }
@@ -82,7 +81,7 @@ public class SimpleCodeInsightTest extends LightJavaCodeInsightFixtureTestCase {
 
   public void testReference() {
     PsiReference referenceAtCaret =
-            myFixture.getReferenceAtCaretPositionWithAssertion("ReferenceTestData.java", "DefaultTestData.simple");
+        myFixture.getReferenceAtCaretPositionWithAssertion("ReferenceTestData.java", "DefaultTestData.simple");
     final SimpleProperty resolvedSimpleProperty = assertInstanceOf(referenceAtCaret.resolve(), SimpleProperty.class);
     assertEquals("https://en.wikipedia.org/", resolvedSimpleProperty.getValue());
   }

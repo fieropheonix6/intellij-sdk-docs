@@ -1,10 +1,12 @@
-[//]: # (title: Project Wizard - Adding Support for Creating New Project Types)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Project Wizard - Adding Support for Creating New Project Types
+
+<link-summary>Implementing a custom project creation wizard.</link-summary>
 
 ## Project Wizard
 
-Working with the project wizard can be illustrated with the [RedLine SmallTalk plugin](https://github.com/bulenkov/RedlineSmalltalk)
+Working with the project wizard can be illustrated with the [RedLine SmallTalk plugin](https://github.com/bulenkov/RedlineSmalltalk). See also [](intro_project_wizard.md).
 
 ## Implementing a New Module Type
 
@@ -68,7 +70,7 @@ Refer to [SmallTalk module type](https://github.com/bulenkov/RedlineSmalltalk/bl
 > Starting with the 2022.1 release, IntelliJ-based IDEs use the refreshed project wizard and some module builder base classes return `false` from `isAvailable()` when the new wizard is enabled.
 > If your module builder is not visible in 2022.1, make sure that your `ModuleBuilder.isAvailable()` returns `true`.
 >
-{type="note"}
+{style="note"}
 
 ### Implementing Module Builder Listener
 
@@ -112,9 +114,9 @@ Here is an example that creates a module if no other modules exist in the projec
 
 ```java
 @Override
-public void setupProjectStructure(Collection<DetectedProjectRoot> roots,
-                                  ProjectDescriptor projectDescriptor,
-                                  ProjectFromSourcesBuilder builder) {
+public void setupProjectStructure(@NotNull Collection<DetectedProjectRoot> roots,
+                                  @NotNull ProjectDescriptor projectDescriptor,
+                                  @NotNull ProjectFromSourcesBuilder builder) {
   List<ModuleDescriptor> modules = projectDescriptor.getModules();
   if (modules.isEmpty()) {
     modules = new ArrayList<>();

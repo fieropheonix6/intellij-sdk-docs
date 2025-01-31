@@ -1,5 +1,4 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package org.intellij.sdk.settings;
 
 import com.intellij.openapi.options.Configurable;
@@ -7,16 +6,17 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Objects;
 
 /**
  * Provides controller functionality for application settings.
  */
-public class AppSettingsConfigurable implements Configurable {
+final class AppSettingsConfigurable implements Configurable {
 
   private AppSettingsComponent mySettingsComponent;
 
-  // A default constructor with no arguments is required because this implementation
-  // is registered as an applicationConfigurable EP
+  // A default constructor with no arguments is required because
+  // this implementation is registered as an applicationConfigurable
 
   @Nls(capitalization = Nls.Capitalization.Title)
   @Override
@@ -38,24 +38,26 @@ public class AppSettingsConfigurable implements Configurable {
 
   @Override
   public boolean isModified() {
-    AppSettingsState settings = AppSettingsState.getInstance();
-    boolean modified = !mySettingsComponent.getUserNameText().equals(settings.userId);
-    modified |= mySettingsComponent.getIdeaUserStatus() != settings.ideaStatus;
-    return modified;
+    AppSettings.State state =
+        Objects.requireNonNull(AppSettings.getInstance().getState());
+    return !mySettingsComponent.getUserNameText().equals(state.userId) ||
+        mySettingsComponent.getIdeaUserStatus() != state.ideaStatus;
   }
 
   @Override
   public void apply() {
-    AppSettingsState settings = AppSettingsState.getInstance();
-    settings.userId = mySettingsComponent.getUserNameText();
-    settings.ideaStatus = mySettingsComponent.getIdeaUserStatus();
+    AppSettings.State state =
+        Objects.requireNonNull(AppSettings.getInstance().getState());
+    state.userId = mySettingsComponent.getUserNameText();
+    state.ideaStatus = mySettingsComponent.getIdeaUserStatus();
   }
 
   @Override
   public void reset() {
-    AppSettingsState settings = AppSettingsState.getInstance();
-    mySettingsComponent.setUserNameText(settings.userId);
-    mySettingsComponent.setIdeaUserStatus(settings.ideaStatus);
+    AppSettings.State state =
+        Objects.requireNonNull(AppSettings.getInstance().getState());
+    mySettingsComponent.setUserNameText(state.userId);
+    mySettingsComponent.setIdeaUserStatus(state.ideaStatus);
   }
 
   @Override

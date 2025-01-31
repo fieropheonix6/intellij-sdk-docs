@@ -1,45 +1,47 @@
-[//]: # (title: 10. Reference Contributor)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 10. Reference Contributor
 
-<microformat>
+<link-summary>Sample implementation of reference contributor adding Simple language references in Java strings.</link-summary>
+
+<tldr>
 
 **Reference**: [](references_and_resolve.md), [](psi_references.md)
 
-**Code**: [`SimpleNamedElement`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/SimpleNamedElement.java),
-[`SimpleNamedElementImpl`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/impl/SimpleNamedElementImpl.java),
-[`SimpleReference.java`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReference.java),
-[`SimpleReferenceContributor`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReferenceContributor.java),
-[`SimpleRefactoringSupportProvider`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleRefactoringSupportProvider.java)
+**Code**: [`SimpleNamedElement`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/SimpleNamedElement.java),
+[`SimpleNamedElementImpl`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/impl/SimpleNamedElementImpl.java),
+[`SimpleReference.java`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReference.java),
+[`SimpleReferenceContributor`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReferenceContributor.java),
+[`SimpleRefactoringSupportProvider`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleRefactoringSupportProvider.java)
 
 **Testing**: [](completion_test.md), [](rename_test.md), [](reference_test.md),
 
-</microformat>
+</tldr>
 
-<include src="language_and_filetype.md" include-id="custom_language_tutorial_header"></include>
+<include from="language_and_filetype.md" element-id="custom_language_tutorial_header"></include>
 
 The references functionality is one of the most important parts in the implementation of custom language support.
 Resolving references means the ability to go from the usage of an element to its declaration, completion, rename refactoring, find usages, etc.
 
 > Every PSI element that can be renamed or referenced needs to implement [`PsiNamedElement`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiNamedElement.java) interface.
 >
-{type="note"}
+{style="note"}
 
 ## Define a Named Element Class
 
 The classes below show how the Simple Language fulfills the need to implement `PsiNamedElement`.
 
-The [`SimpleNamedElement`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/SimpleNamedElement.java) interface is subclassed from [`PsiNameIdentifierOwner`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiNameIdentifierOwner.java).
+The [`SimpleNamedElement`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/SimpleNamedElement.java) interface is subclassed from [`PsiNameIdentifierOwner`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiNameIdentifierOwner.java).
 
 ```java
 ```
-{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/SimpleNamedElement.java"}
+{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/SimpleNamedElement.java" include-symbol="SimpleNamedElement"}
 
-The [`SimpleNamedElementImpl`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/impl/SimpleNamedElementImpl.java) class implements the `SimpleNamedElement` interface and extends [`ASTWrapperPsiElement`](%gh-ic%/platform/core-impl/src/com/intellij/extapi/psi/ASTWrapperPsiElement.java).
+The [`SimpleNamedElementImpl`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/impl/SimpleNamedElementImpl.java) class implements the `SimpleNamedElement` interface and extends [`ASTWrapperPsiElement`](%gh-ic%/platform/core-impl/src/com/intellij/extapi/psi/ASTWrapperPsiElement.java).
 
 ```java
 ```
-{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/impl/SimpleNamedElementImpl.java"}
+{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/impl/SimpleNamedElementImpl.java" include-symbol="SimpleNamedElementImpl"}
 
 ## Define Helper Methods for Generated PSI Elements
 
@@ -105,7 +107,7 @@ public class SimpleElementFactory {
 ## Update Grammar and Regenerate the Parser
 
 Now make corresponding changes to the <path>Simple.bnf</path> grammar file by replacing the `property` definition with the lines below.
-Don't forget to regenerate the parser after updating the file!
+Remember to regenerate the parser after updating the file!
 Right-click on the <path>Simple.bnf</path> file and select **Generate Parser Code**.
 
 ```bnf
@@ -118,23 +120,24 @@ property ::= (KEY? SEPARATOR VALUE?) | KEY {
 
 ## Define a Reference
 
-Now define a reference class [`SimpleReference.java`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReference.java) to resolve a property from its usage.
-This requires extending [`PsiReferenceBase`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiReferenceBase.java) and implementing [`PsiPolyVariantReference`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiPolyVariantReference.java).
-The latter enables the reference to resolve to more than one element or to resolve result(s) for a superset of valid resolve cases.
+Now define a reference class [`SimpleReference.java`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReference.java) to resolve a property from its usage.
+As a single reference can [resolve to multiple](references_and_resolve.md#resolving-to-multiple-targets) Simple properties, it implements [`PsiPolyVariantReference`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiPolyVariantReference.java).
+To simplify the implementation, [`PsiPolyVariantReferenceBase`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiPolyVariantReferenceBase.java) is used as a base class.
+
 
 ```java
 ```
-{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReference.java"}
+{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReference.java" include-symbol="SimpleReference"}
 
 ## Define a Reference Contributor
 
 A reference contributor allows the `simple_language_plugin` to provide references to Simple Language from elements in other languages such as Java.
-Create [`SimpleReferenceContributor`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReferenceContributor.java) by subclassing [`PsiReferenceContributor`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiReferenceContributor.java).
+Create [`SimpleReferenceContributor`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReferenceContributor.java) by subclassing [`PsiReferenceContributor`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiReferenceContributor.java).
 Contribute a reference to each usage of a property:
 
 ```java
 ```
-{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReferenceContributor.java"}
+{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleReferenceContributor.java" include-symbol="SimpleReferenceContributor"}
 
 ## Register the Reference Contributor
 
@@ -142,14 +145,15 @@ The `SimpleReferenceContributor` implementation is registered using the `com.int
 
 ```xml
 <extensions defaultExtensionNs="com.intellij">
-  <psi.referenceContributor language="JAVA"
-                            implementation="org.intellij.sdk.language.SimpleReferenceContributor"/>
+  <psi.referenceContributor
+      language="JAVA"
+      implementation="org.intellij.sdk.language.SimpleReferenceContributor"/>
 </extensions>
 ```
 
 ## Run the Project with the Reference Contributor
 
-Run the project by using the Gradle [`runIde`](gradle_prerequisites.md#running-a-simple-gradle-based-intellij-platform-plugin) task.
+Run the project by using the Gradle [`runIde`](creating_plugin_project.md#running-a-plugin-with-the-runide-gradle-task) task.
 
 The IDE now resolves the property and provides [completion](https://www.jetbrains.com/help/idea/auto-completing-code.html#basic_completion) suggestions:
 
@@ -162,12 +166,12 @@ The [Rename refactoring](https://www.jetbrains.com/help/idea/rename-refactorings
 ## Define a Refactoring Support Provider
 
 Support for in-place refactoring is specified explicitly in a refactoring support provider.
-Create [`SimpleRefactoringSupportProvider`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleRefactoringSupportProvider.java) by subclassing [`RefactoringSupportProvider`](%gh-ic%/platform/refactoring/src/com/intellij/lang/refactoring/RefactoringSupportProvider.java)
+Create [`SimpleRefactoringSupportProvider`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleRefactoringSupportProvider.java) by subclassing [`RefactoringSupportProvider`](%gh-ic%/platform/refactoring/src/com/intellij/lang/refactoring/RefactoringSupportProvider.java)
 As long as an element is a `SimpleProperty` it is allowed to be refactored:
 
 ```java
 ```
-{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleRefactoringSupportProvider.java"}
+{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleRefactoringSupportProvider.java" include-symbol="SimpleRefactoringSupportProvider"}
 
 ## Register the Refactoring Support Provider
 
@@ -183,7 +187,7 @@ The `SimpleRefactoringSupportProvider` implementation is registered with the Int
 
 ## Run the Project
 
-Run the project by using the Gradle [`runIde`](gradle_prerequisites.md#running-a-simple-gradle-based-intellij-platform-plugin) task.
+Run the project by using the Gradle [`runIde`](creating_plugin_project.md#running-a-plugin-with-the-runide-gradle-task) task.
 
 The IDE now supports [refactoring](https://www.jetbrains.com/help/idea/rename-refactorings.html) suggestions:
 

@@ -1,19 +1,21 @@
-[//]: # (title: 8. Find Usages Test)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 8. Find Usages Test
 
-<microformat>
+<link-summary>Implementing and running test for finding usages functionality implemented as a part of the Custom Language Support Tutorial.</link-summary>
+
+<tldr>
 
 **Tested Functionality**: [](find_usages_provider.md)
 
-</microformat>
+</tldr>
 
-<include src="tests_prerequisites.md" include-id="custom_language_testing_tutorial_header"></include>
+<include from="tests_prerequisites.md" element-id="custom_language_testing_tutorial_header"></include>
 
 ## Define the Test Data
 Create the <path>FindUsagesTestData.simple</path> file in the <path>testData</path> directory.
 
-```bash
+```properties
 ```
 {src="simple_language_plugin/src/test/testData/FindUsagesTestData.simple"}
 
@@ -33,4 +35,5 @@ This test verifies the find usage functionality will identify the "key with spac
 
 
 ## Run the Test
-[Run](parsing_test.md#run-the-test) the test and make sure it's green.
+
+<include from="custom_language_testing_snippets.md" element-id="runTests"/>

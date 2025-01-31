@@ -1,17 +1,19 @@
-[//]: # (title: Internal Actions - LaF Defaults)
-
 <!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+
+# Internal Actions - LaF Defaults
+
+<link-summary>Using LaF Defaults window to view and prototype UI control colors in a running IDE.</link-summary>
 
 The <control>LaF Defaults</control> window provides a key-value pair lookup for UI Controls.
 It also allows interactive prototyping of UI Control color changes.
 
 _LaF_ stands for _Look and Feel_, see [Swing Tutorial](https://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/index.html) for more details.
 
-<include src="internal_actions_intro.md" include-id="enable_internal_mode_tip"></include>
+<include from="internal_actions_intro.md" element-id="enable_internal_mode_tip"></include>
 
 ## Opening LaF Defaults
 
-The <control>LaF Defaults</control> window is opened by selecting the menu item <menupath>Tools | Internal Actions | UI | LaF Defaults</menupath>.
+The <control>LaF Defaults</control> window is opened by selecting the menu item <ui-path>Tools | Internal Actions | UI | LaF Defaults</ui-path>.
 
 It has two columns representing key-value pairs for UI Controls:
 
@@ -38,4 +40,4 @@ The <control>Choose Color</control> window is displayed.
 Color changes can be specified as RGB, HSB, hexadecimal, or using the graphical color picker.
 Pressing the <control>Choose</control> button changes the UI Control color immediately.
 
-UI Control colors can be reset using the <control>Choose Color</control> window, or by resetting the [UI Theme](https://www.jetbrains.com/help/idea/settings-appearance.html).
+UI Control colors can be reset using the <control>Choose Color</control> window, or by resetting the [theme](https://www.jetbrains.com/help/idea/settings-appearance.html).

@@ -1,4 +1,4 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 
 package org.intellij.sdk.liveTemplates;
 
@@ -7,7 +7,7 @@ import com.intellij.codeInsight.template.macro.MacroBase;
 import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class TitleCaseMacro extends MacroBase {
+final class TitleCaseMacro extends MacroBase {
 
   public TitleCaseMacro() {
     super("titleCase", "titleCase(String)");
@@ -27,7 +27,7 @@ public class TitleCaseMacro extends MacroBase {
     if (text == null) {
       return null;
     }
-    if (text.length() > 0) {
+    if (!text.isEmpty()) {
       // Capitalize the start of every word
       text = StringUtil.toTitleCase(text);
     }
