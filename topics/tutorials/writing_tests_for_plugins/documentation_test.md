@@ -1,14 +1,16 @@
-[//]: # (title: 11. Documentation Test)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 11. Documentation Test
 
-<microformat>
+<link-summary>Implementing and running test for documentation provider implemented as a part of the Custom Language Support Tutorial.</link-summary>
+
+<tldr>
 
 **Tested Functionality**: [](documentation_provider.md)
 
-</microformat>
+</tldr>
 
-<include src="tests_prerequisites.md" include-id="custom_language_testing_tutorial_header"></include>
+<include from="tests_prerequisites.md" element-id="custom_language_testing_tutorial_header"></include>
 
 ## Define a Test Method
 Add the `testDocumentation()` method to the `SimpleCodeInsightTest` class [previously defined](completion_test.md#define-a-test).
@@ -24,4 +26,5 @@ Finally, the documentation string is verified against the expected output.
 {src="simple_language_plugin/src/test/java/org/intellij/sdk/language/SimpleCodeInsightTest.java" include-symbol="testDocumentation"}
 
 ## Run the Test
-[Run](parsing_test.md#run-the-test) the test and make sure it's green.
+
+<include from="custom_language_testing_snippets.md" element-id="runTests"/>

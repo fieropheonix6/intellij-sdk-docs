@@ -1,10 +1,12 @@
-[//]: # (title: Text Selection)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Text Selection
+
+<link-summary>Providing additional text ranges used when a text selection is extended/shrank.</link-summary>
 
 ## Extending/Shrinking Text Selection
 
-Implementing [`ExtendWordSelectionHandler`](%gh-ic%/platform/lang-api/src/com/intellij/codeInsight/editorActions/ExtendWordSelectionHandler.java) and registering it as `com.intellij.extendWordSelectionHandler` EP in your <path>[plugin.xml](plugin_configuration_file.md)</path> allows you to provide additional text ranges to be used when extending or shrinking a selection.
+Implementing [`ExtendWordSelectionHandler`](%gh-ic%/platform/lang-api/src/com/intellij/codeInsight/editorActions/ExtendWordSelectionHandler.java) and registering it in `com.intellij.extendWordSelectionHandler` EP in your <path>[plugin.xml](plugin_configuration_file.md)</path> allows you to provide additional text ranges to be used when extending or shrinking a selection.
 Return `true` from `canSelect(PsiElement)` for the PSI elements that you want to provide additional text-ranges for.
 The IntelliJ Platform will call `select(PsiElement, CharSequence, int, Editor)` for these elements where you can compute additional text ranges and return them as `List<TextRange>`.
 
@@ -16,7 +18,7 @@ See also:
 ### Overview
 
 The two actions [Extend Selection and Shrink Selection](https://www.jetbrains.com/help/idea/working-with-source-code.html#editor_code_selection) in IntelliJ Platform IDEs let you adjust selected text based on the structure of the source code.
-This makes it easy to select not only expressions, blocks, and function definitions, but also code like whole lines or tags in JavaDoc comments.
+This makes it easy to select not only expressions, blocks, and function definitions, but also code like whole lines or tags in Javadoc comments.
 
 When implementing a custom language, the IntelliJ Platform provides basic implementations of this EP, allowing you to select code based on your PSI structure and to select whole lines.
 In many cases this is sufficient to provide a good user experience.
@@ -35,7 +37,7 @@ If the cursor is located at argument `a`, extending the selection would first se
 However, you might want to select the list of all arguments as an intermediate step.
 This can be achieved by implementing this EP in the following way:
 
-1. Create a class that implements the `ExtendWordSelectionHandler` interface and register it as a `com.intellij.extendWordSelectionHandler` EP in your <path>plugin.xml</path>.
+1. Create a class that implements the `ExtendWordSelectionHandler` interface and register it in a `com.intellij.extendWordSelectionHandler` EP in your <path>plugin.xml</path>.
 2. The `canSelect(PsiElement)` method should return `true` for the function call node.
    That indicates that `select(PsiElement, CharSequence, int, Editor)` will be called for the function-call node.
 3. When the `select()` method is called, you can use the function call PSI element or the editor text to extract the text range that spans the arguments `a` and `b` and return it as `List<TextRange>` with one element.
@@ -43,8 +45,8 @@ This can be achieved by implementing this EP in the following way:
 ### Further Insight and Debugging
 
 Looking at other implementations can be an effective way to get a better understanding of how this EP works.
-To get further insight into this EP, you may want to take a look at [`DocTagSelectioner`](%gh-ic%/java/java-impl/src/com/intellij/codeInsight/editorActions/wordSelection/DocTagSelectioner.java).
-It provides the ability to select tag names like `@param` in JavaDoc comments.
+To get further insight into this EP, you may want to take a look at [`DocTagSelectioner`](%gh-ic%/java/java-frontback-impl/src/com/intellij/codeInsight/editorActions/wordSelection/DocTagSelectioner.java).
+It provides the ability to select tag names like `@param` in Javadoc comments.
 Additionally, the [IntelliJ Platform Explorer](https://jb.gg/ipe?extensions=com.intellij.extendWordSelectionHandler) provides a list of open-source plugins with implementations of the `com.intellij.extendWordSelectionHandler` EP.
 
 There are also some important places in the IntelliJ Platform to add breakpoints during debugging.

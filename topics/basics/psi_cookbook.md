@@ -1,17 +1,16 @@
-[//]: # (title: PSI Cookbook)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# PSI Cookbook
 
-<excerpt rel="excerpt"/>
+<link-summary rel="excerpt"/>
 <p id="excerpt">
 This page gives recipes for the most common operations for working with the PSI (Program Structure Interface).
 </p>
 
 Unlike [Developing Custom Language Plugins](custom_language_support.md), it is about working with the PSI of existing languages (such as Java).
 
-> Please see also [](psi_performance.md).
+> See also the [](psi_performance.md) section.
 >
-{type="tip"}
 
 ## General
 
@@ -33,10 +32,10 @@ Unlike [Developing Custom Language Plugins](custom_language_support.md), it is a
 
 ## Java Specific
 
-> If your plugin depends on Java functionality and targets 2019.2 or later, please make sure to follow the steps from this [blog post](https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin/).
+> If your plugin depends on Java functionality and targets 2019.2 or later, see [](plugin_compatibility.md#java).
 > Also consider using [UAST](uast.md) if your plugin supports other JVM languages.
 >
-{type="note"}
+{style="note"}
 
 ### How do I find all inheritors of a class?
 
@@ -59,7 +58,7 @@ Unlike [Developing Custom Language Plugins](custom_language_support.md), it is a
 ```java
 PsiJavaFile javaFile = (PsiJavaFile) psiClass.getContainingFile();
 PsiPackage psiPackage = JavaPsiFacade.getInstance(project)
-        .findPackage(javaFile.getPackageName());
+    .findPackage(javaFile.getPackageName());
 ```
 
 or
@@ -69,3 +68,11 @@ or
 ### How do I find the methods overriding a specific method?
 
 [`OverridingMethodsSearch.search()`](%gh-ic%/java/java-indexing-api/src/com/intellij/psi/search/searches/OverridingMethodsSearch.java)
+
+### How do I check the presence of a JVM library?
+<primary-label ref="2023.2"/>
+
+Use dedicated (and heavily cached) methods from [`JavaLibraryUtil`](%gh-ic%/java/openapi/src/com/intellij/java/library/JavaLibraryUtil.java):
+
+- `hasLibraryClass()` to check presence via known library class FQN
+- `hasLibraryJar()` using Maven coordinates (for example, `io.micronaut:micronaut-core`).

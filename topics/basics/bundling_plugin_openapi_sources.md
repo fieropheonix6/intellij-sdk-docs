@@ -1,30 +1,39 @@
-[//]: # (title: Bundling Plugin API Sources)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+# Bundling Plugin API Sources
+
+<link-summary>Exposing plugin's API sources for other plugins.</link-summary>
 
 If a plugin exposes its own API that is meant to be used by other plugins, it is worth considering bundling the plugin's API sources in the ZIP distribution.
-
-If a third-party plugin uses [](tools_gradle_intellij_plugin.md) and adds a dependency to the plugin which bundles sources in the ZIP distribution, sources will be automatically attached to the plugin library and visible in IDE when developers navigate to the API classes.
 Being able to see API sources drastically improves the development experience, and it is highly recommended to bundle them.
 
-> Attaching bundled plugin sources in IDE is available starting with Gradle IntelliJ Plugin 1.7.0.
->
-{type="note"}
+If a third-party plugin uses [](tools_intellij_platform_gradle_plugin.md) or [](tools_gradle_intellij_plugin.md) (1.7.0+) and adds a dependency to a plugin bundling sources in the ZIP distribution,
+sources will be automatically attached to the plugin library and visible in IDE when developers navigate to the API classes.
 
-## API sources location
+## API Sources Location
 
 The API source JARs must be located in the <path>example-plugin.zip!/plugin/lib/src</path> directory in the plugin ZIP distribution, e.g.:
 
-```text
-example-plugin.zip
-└── example-plugin
-    └── lib
-        ├── example-plugin.jar
-        └── src
-            └── example-plugin-api-src.jar
+```plantuml
+@startuml
+
+skinparam TitleFontName JetBrains Sans
+skinparam TitleFontStyle plain
+skinparam TitleFontSize 16
+skinparam DefaultTextAlignment left
+
+title
+  example-plugin.zip // (Plugin distribution file) //
+  |_ example-plugin
+    |_ lib
+      |_ example-plugin.jar // (Plugin) //
+      |_ src
+        |_ example-plugin-api-src.jar // (API sources JAR) //
+end title
+@enduml
 ```
 
-The plugin ZIP can contain multiple source JARs, and there are no strict rules for the source JAR names.
+The plugin distribution ZIP file can contain multiple source JARs, and there are no strict rules for the source JAR names.
 
 ## Defining Plugin API
 

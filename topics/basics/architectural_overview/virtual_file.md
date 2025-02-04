@@ -1,6 +1,8 @@
-[//]: # (title: Virtual Files)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+# Virtual Files
+
+<link-summary>Virtual Files represent local or remote files provided by the Virtual File System.</link-summary>
 
 A [`VirtualFile`](%gh-ic%/platform/core-api/src/com/intellij/openapi/vfs/VirtualFile.java) (VF) is the IntelliJ Platform's representation of a file in a [Virtual File System (VFS)](virtual_file_system.md).
 
@@ -8,16 +10,17 @@ Most commonly, a virtual file is a file in a local file system.
 However, the IntelliJ Platform supports multiple pluggable file system implementations, so virtual files can also represent classes in a JAR file, old revisions of files loaded from a version control repository, and so on.
 
 The VFS level deals only with binary content.
-Contents of a `VirtualFile` are treated as a stream of bytes, but concepts like encodings and line separators are handled on higher system levels.
+Contents of a `VirtualFile` are treated as a stream of bytes, but concepts like encodings and line separators are handled at higher system levels.
 
 ## How do I get a virtual file?
 
-| Context                          | API                                                                                                                                                                                                                                                                                                                                          |
-|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Action](basic_action_system.md) | [`AnActionEvent.getData(PlatformDataKeys.VIRTUAL_FILE)`](%gh-ic%/platform/editor-ui-api/src/com/intellij/openapi/actionSystem/AnActionEvent.java)<br/>[`AnActionEvent.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY)`](%gh-ic%/platform/editor-ui-api/src/com/intellij/openapi/actionSystem/AnActionEvent.java) for multiple selection |
-| [Document](documents.md)         | [`FileDocumentManager.getFile()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/fileEditor/FileDocumentManager.java)                                                                                                                                                                                                                |
-| [PSI File](psi_files.md)         | [`PsiFile.getVirtualFile()`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiFile.java) (may return `null` if the PSI file exists only in memory)                                                                                                                                                                                      |
-| Local File System Path           | [`LocalFileSystem.findFileByIoFile()`](%gh-ic%/platform/analysis-api/src/com/intellij/openapi/vfs/LocalFileSystem.java)<br/>[`VirtualFileManager.findFileByNioPath()`/`refreshAndFindFileByNioPath()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/vfs/VirtualFileManager.java) (2020.2+)                                     |
+| Context                          | API                                                                                                                                                                                                                                                                                                                                           |
+|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Action](basic_action_system.md) | <p>[`AnActionEvent.getData(PlatformDataKeys.VIRTUAL_FILE)`](%gh-ic%/platform/editor-ui-api/src/com/intellij/openapi/actionSystem/AnActionEvent.java)</p><p>[`AnActionEvent.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY)`](%gh-ic%/platform/editor-ui-api/src/com/intellij/openapi/actionSystem/AnActionEvent.java) for multiple selection</p> |
+| [Document](documents.md)         | [`FileDocumentManager.getFile()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/fileEditor/FileDocumentManager.java)                                                                                                                                                                                                                     |
+| [PSI File](psi_files.md)         | [`PsiFile.getVirtualFile()`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiFile.java) (may return `null` if the PSI file exists only in memory)                                                                                                                                                                                           |
+| File Name                        | [`FilenameIndex.getVirtualFilesByName()`](%gh-ic%/platform/indexing-api/src/com/intellij/psi/search/FilenameIndex.java)                                                                                                                                                                                                                       |
+| Local File System Path           | <p>[`LocalFileSystem.findFileByIoFile()`](%gh-ic%/platform/analysis-api/src/com/intellij/openapi/vfs/LocalFileSystem.java)</p><p>[`VirtualFileManager.findFileByNioPath()`/`refreshAndFindFileByNioPath()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/vfs/VirtualFileManager.java) (2020.2+)</p>                                     |
 
 ## What can I do with it?
 
@@ -38,7 +41,7 @@ Invoking a VFS refresh might be necessary for accessing a file that has just bee
 A particular file on disk is represented by equal `VirtualFile` instances for the IDE process's entire lifetime.
 There may be several instances corresponding to the same file, and they can be garbage-collected.
 The file is a `UserDataHolder`, and the user data is shared between those equal instances.
-If a file is deleted, its corresponding VirtualFile instance becomes invalid (`isValid()` returns `false`), and operations cause exceptions.
+If a file is deleted, its corresponding `VirtualFile` instance becomes invalid (`isValid()` returns `false`), and operations cause exceptions.
 
 ## How do I create a virtual file?
 
@@ -49,15 +52,16 @@ If one needs to create a file through VFS, use `VirtualFile.createChildData()` t
 
 ## How do I get notified when VFS changes?
 
-> See [Virtual file system events](virtual_file_system.md#virtual-file-system-events) for important details.
+> See [](virtual_file_system.md#virtual-file-system-events) for important details.
 >
-{type="note"}
+{style="note"}
 
 Implement [`BulkFileListener`](%gh-ic%/platform/core-api/src/com/intellij/openapi/vfs/newvfs/BulkFileListener.java) and subscribe to the [message bus](messaging_infrastructure.md) topic `VirtualFileManager.VFS_CHANGES`.
 For example:
 
 ```java
-project.getMessageBus().connect().subscribe(VirtualFileManager.VFS_CHANGES,
+project.getMessageBus().connect().subscribe(
+    VirtualFileManager.VFS_CHANGES,
     new BulkFileListener() {
       @Override
       public void after(@NotNull List<? extends VFileEvent> events) {
@@ -76,7 +80,7 @@ For a non-blocking alternative, starting with version 2019.2 of the platform, se
 
 For storing a large set of Virtual Files, use dedicated `VfsUtilCore.createCompactVirtualFileSet()`.
 
-Use [`ProjectLocator`](%gh-ic%/platform/projectModel-api/src/com/intellij/openapi/project/ProjectLocator.java) to find the projects that contain a given virtual file.
+Use [`ProjectLocator`](%gh-ic%/platform/core-api/src/com/intellij/openapi/project/ProjectLocator.kt) to find the projects that contain a given virtual file.
 
 ## How do I extend VFS?
 
@@ -86,4 +90,10 @@ To hook into operations performed in the local file system (for example, when de
 
 ## What are the rules for working with VFS?
 
-See [Virtual File System](virtual_file_system.md) for a detailed description of the VFS architecture and usage guidelines.
+See [](virtual_file_system.md) for a detailed description of the VFS architecture and usage guidelines.
+
+## How can I store additional metadata in files?
+
+See:
+- [`FilePropertyPusher`](%gh-ic%/platform/projectModel-api/src/com/intellij/openapi/roots/impl/FilePropertyPusher.java)
+- [`FileAttribute`](%gh-ic%/platform/analysis-api/src/com/intellij/openapi/vfs/newvfs/FileAttribute.java)

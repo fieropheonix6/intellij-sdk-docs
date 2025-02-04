@@ -1,6 +1,8 @@
-[//]: # (title: PHP Type Providers)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# PHP Type Providers
+
+<link-summary>Providing element type information for PHP type inference mechanism.</link-summary>
 
 Type inference in PhpStorm is built on top of type providers, each of which is responsible for inferring the types of
 specific PSI elements.
@@ -13,7 +15,7 @@ All providers inherit from `com.jetbrains.php.lang.psi.resolve.types.PhpTypeProv
 
 The first phase of type inference takes place at the indexing stage.
 At this phase, PhpStorm calls `PhpTypeProvider4.getType()` on each type provider.
-PhpStorm only has access to local information from the current file and can't use information from other files as well as indexes because it does't yet build them.
+PhpStorm only has access to local information from the current file and can't use information from other files as well as indexes because it doesn't yet build them.
 Sometimes, it can deduce the exact type from this information, but in other cases this is impossible because PhpStorm requires information from other files.
 
 Because of this, there are two kinds of types in PhpStorm:
@@ -21,7 +23,7 @@ Because of this, there are two kinds of types in PhpStorm:
 - Complete types
 - Incomplete types
 
-### Complete types
+### Complete Types
 
 Complete types are types that are known exactly based on **only** the local information of the current file.
 
@@ -43,7 +45,7 @@ function foo(string $a): string {
 
 Here, since the `$a` parameter has a `string` type hint, PhpStorm can infer the Complete type `string`.
 
-### Incomplete types
+### Incomplete Types
 
 Incomplete types are types that need additional information from other project files besides the containing file.
 
@@ -123,7 +125,7 @@ In the Incomplete type resolving process, PhpStorm will resolve each union type 
 
 Since some providers may return types for the same PSI element, union types may appear for some elements.
 
-## PhpType
+## `PhpType`
 
 PhpStorm uses the `com.jetbrains.php.lang.psi.resolve.types.PhpType` class to work with types.
 
@@ -134,7 +136,7 @@ To check that a type is Complete, use `isComplete()`.
 To resolve the Incomplete type, use `global()`.
 This method shouldn't be used during indexing, namely inside `PhpTypeProvider4.getType()`.
 
-### How to get PhpType from PSI?
+### How to get `PhpType` from PSI?
 
 In PhpStorm, PSI elements with types implement the `com.jetbrains.php.lang.psi.elements.PhpTypedElement` interface.
 To get the type of element, use the `getType()`.
@@ -201,7 +203,7 @@ To implement `PhpTypeProvider4`, you need to override 4 methods:
    > When choosing a provider key, keep in mind that other plugins may already be using it.
    > In this case, there will be an error stating that the key is duplicated, which will lead to incorrect work of both plugins.
    >
-   {type="note"}
+   {style="note"}
 
 2. `getType()` returns the type of the expression for the given element.
    It's called at the indexing stage, and therefore its implementation **can't access** any information from the index and **must** rely only on local information.
@@ -218,7 +220,7 @@ You can also override the `emptyResultIsComplete()`, which indicates whether the
 
 The goal of this example is to provide types for field references assigned in `setUp` method if containing class is PHPUnit one.
 
-### Define a PhpUnitFiledInitializedInSetUpMethodsTP
+### Define a `PhpUnitFiledInitializedInSetUpMethodsTP`
 
 ```java
 import com.intellij.openapi.project.Project;
@@ -292,7 +294,7 @@ public class PhpUnitFiledInitializedInSetUpMethodsTP implements PhpTypeProvider4
 }
 ```
 
-### Register the PhpUnitFiledInitializedInSetUpMethodsTP
+### Register the `PhpUnitFiledInitializedInSetUpMethodsTP`
 
 The `PhpUnitFiledInitializedInSetUpMethodsTP` implementation is registered with the IntelliJ Platform in the
 plugin configuration file using the `com.jetbrains.php.typeProvider4` extension point.

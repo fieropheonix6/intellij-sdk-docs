@@ -1,4 +1,4 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 package org.intellij.sdk.language;
 
@@ -54,15 +54,15 @@ class SimpleCreatePropertyQuickFix extends BaseIntentionAction {
 
   @Override
   public void invoke(@NotNull final Project project, final Editor editor, PsiFile file) throws
-          IncorrectOperationException {
+      IncorrectOperationException {
     ApplicationManager.getApplication().invokeLater(() -> {
       Collection<VirtualFile> virtualFiles =
-              FileTypeIndex.getFiles(SimpleFileType.INSTANCE, GlobalSearchScope.allScope(project));
+          FileTypeIndex.getFiles(SimpleFileType.INSTANCE, GlobalSearchScope.allScope(project));
       if (virtualFiles.size() == 1) {
         createProperty(project, virtualFiles.iterator().next());
       } else {
         final FileChooserDescriptor descriptor =
-                FileChooserDescriptorFactory.createSingleFileDescriptor(SimpleFileType.INSTANCE);
+            FileChooserDescriptorFactory.createSingleFileDescriptor(SimpleFileType.INSTANCE);
         descriptor.setRoots(ProjectUtil.guessProjectDir(project));
         final VirtualFile file1 = FileChooser.chooseFile(descriptor, project, null);
         if (file1 != null) {
@@ -75,6 +75,7 @@ class SimpleCreatePropertyQuickFix extends BaseIntentionAction {
   private void createProperty(final Project project, final VirtualFile file) {
     WriteCommandAction.writeCommandAction(project).run(() -> {
       SimpleFile simpleFile = (SimpleFile) PsiManager.getInstance(project).findFile(file);
+      assert simpleFile != null;
       ASTNode lastChildNode = simpleFile.getNode().getLastChildNode();
       // TODO: Add another check for CRLF
       if (lastChildNode != null/* && !lastChildNode.getElementType().equals(SimpleTypes.CRLF)*/) {
@@ -84,7 +85,9 @@ class SimpleCreatePropertyQuickFix extends BaseIntentionAction {
       SimpleProperty property = SimpleElementFactory.createProperty(project, key.replaceAll(" ", "\\\\ "), "");
       simpleFile.getNode().addChild(property.getNode());
       ((Navigatable) property.getLastChild().getNavigationElement()).navigate(true);
-      FileEditorManager.getInstance(project).getSelectedTextEditor().getCaretModel().moveCaretRelatively(2, 0, false, false, false);
+      Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+      assert editor != null;
+      editor.getCaretModel().moveCaretRelatively(2, 0, false, false, false);
     });
   }
 

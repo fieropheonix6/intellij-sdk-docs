@@ -1,6 +1,8 @@
-[//]: # (title: Providing File and Code Templates)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Providing File and Code Templates
+
+<link-summary>Creating file templates and assigning them to categories.</link-summary>
 
 The IntelliJ Platform allows plugins to provide custom file templates specific to the plugin's functionalities.
 In order to include custom templates in the plugin, a template file has to be created and placed in the specific place of plugin resources, depending on the template's purpose.
@@ -13,7 +15,7 @@ There are multiple ways of creating file templates:
 * [Copy an existing file template](https://www.jetbrains.com/help/idea/using-file-and-code-templates.html#copy-existing-template)
 
 Once the file templates are created and saved, they should be copied to the plugin project's <path>resources</path> directory.
-The created template can be found in the [IDE configuration directory](https://www.jetbrains.com/help/idea/directories-used-by-the-ide-to-store-settings-caches-plugins-and-logs.html#config-directory) in the <path>fileTemplates</path> directory, or they can be exported via <menupath>File | Manage IDE Settings | Export Settings</menupath> by selecting the <control>File Templates (schemes)</control> checkbox.
+The created template can be found in the [IDE configuration directory](https://www.jetbrains.com/help/idea/directories-used-by-the-ide-to-store-settings-caches-plugins-and-logs.html#config-directory) in the <path>fileTemplates</path> directory, or they can be exported via <ui-path>File | Manage IDE Settings | Export Settings</ui-path> by selecting the <control>File Templates (schemes)</control> checkbox.
 The exported ZIP file will contain the <path>fileTemplates</path> directory with the created templates.
 The <path>fileTemplates</path> directory should be moved to the plugin project's <path>resources</path> folder, and the <path>.ft</path> extension must be added to the template files, e.g., <path>My Class.java</path> must be renamed to <path>My Class.java.ft</path>.
 
@@ -23,7 +25,7 @@ Note that [live templates](live_templates.md) expressions should be surrounded w
 
 > Please note that adding templates with child/multiple files in custom plugins is currently not supported.
 >
-{type="note"}
+{style="note"}
 
 ### File Templates Categories
 
@@ -57,17 +59,17 @@ The <control>Other</control> category contains other templates organized in grou
 It includes templates located in the <path>fileTemplates/j2ee</path> directory and registered via the `com.intellij.fileTemplateGroup` extension point (EP).
 Note that the <path>j2ee</path> directory name is historical and unrelated to the J2EE technology.
 This category is intended for templates that are not used for creating core language entities or are used less frequently by users, e.g., a specific XML configuration file, a framework-specific class in Java language, etc.
-To include file templates in the <control>Other</control> section of the <menupath>Settings/Preferences | Editor | File and Code Templates</menupath> settings page, provide an implementation of the
+To include file templates in the <control>Other</control> section of the <ui-path>Settings | Editor | File and Code Templates</ui-path> settings page, provide an implementation of the
 [`FileTemplateGroupDescriptorFactory`](%gh-ic%/platform/lang-api/src/com/intellij/ide/fileTemplates/FileTemplateGroupDescriptorFactory.java)
 and register it via the `com.intellij.fileTemplateGroup` EP.
 
-**Example**:
+**Example:**
 [`MavenFileTemplateGroupFactory`](%gh-ic%/plugins/maven/src/main/java/org/jetbrains/idea/maven/utils/MavenFileTemplateGroupFactory.java)
 
 Note that
 [`FileTemplateGroupDescriptor`](%gh-ic%/platform/lang-api/src/com/intellij/ide/fileTemplates/FileTemplateGroupDescriptor.java)
 is a subclass of
-[`FileTemplateDescriptor`](%gh-ic%/platform/core-api/src/com/intellij/ide/fileTemplates/FileTemplateDescriptor.java)`,
+[`FileTemplateDescriptor`](%gh-ic%/platform/core-api/src/com/intellij/ide/fileTemplates/FileTemplateDescriptor.java),
 which allows creating nested groups.
 
 ## Creating File Template Description
@@ -84,6 +86,13 @@ It is recommended to follow the convention from the
 [`default.html`](%gh-ic%/platform/platform-resources-en/src/fileTemplates/default.html)
 file.
 
+> If a plugin project is multi-module, and it combines resources into a single JAR, make sure that all template description files have unique names or paths.
+> Otherwise, only the last packed description file will exist in the distribution package.
+>
+{style="warning"}
+
+> See the [](providing_translations.md#bundled-translations) section for information about how to provide file template description translations in plugins.
+
 ## Providing Default File Template Properties
 
 A file template body can use a set of [predefined properties](https://www.jetbrains.com/help/idea/file-template-variables.html#predefined_template_variables) exposed by the IntelliJ Platform out of the box.
@@ -92,6 +101,6 @@ To provide custom properties, implement
 [`DefaultTemplatePropertiesProvider`](%gh-ic%/platform/lang-api/src/com/intellij/ide/fileTemplates/DefaultTemplatePropertiesProvider.java)
 and register it via the `com.intellij.defaultTemplatePropertiesProvider` EP.
 
-**Example**: Java Plugin's
+**Example:** Java Plugin's
 [`TemplatePackagePropertyProvider`](%gh-ic%/java/java-impl/src/com/intellij/ide/fileTemplates/TemplatePackagePropertyProvider.java)
 providing `PACKAGE_NAME` property based on the directory a file is created in.

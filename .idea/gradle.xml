@@ -12,9 +12,9 @@
                   <project path="$PROJECT_DIR$/code_samples/action_basics" />
                 </projects>
               </build>
-              <build path="$PROJECT_DIR$/code_samples/comparing_references_inspection" name="comparing_references_inspection">
+              <build path="$PROJECT_DIR$/code_samples/comparing_string_references_inspection" name="comparing_string_references_inspection">
                 <projects>
-                  <project path="$PROJECT_DIR$/code_samples/comparing_references_inspection" />
+                  <project path="$PROJECT_DIR$/code_samples/comparing_string_references_inspection" />
                 </projects>
               </build>
               <build path="$PROJECT_DIR$/code_samples/conditional_operator_intention" name="conditional_operator_intention">
@@ -35,16 +35,6 @@
               <build path="$PROJECT_DIR$/code_samples/framework_basics" name="framework_basics">
                 <projects>
                   <project path="$PROJECT_DIR$/code_samples/framework_basics" />
-                </projects>
-              </build>
-              <build path="$PROJECT_DIR$/code_samples/inspection_basics" name="inspection_basics">
-                <projects>
-                  <project path="$PROJECT_DIR$/code_samples/inspection_basics" />
-                </projects>
-              </build>
-              <build path="$PROJECT_DIR$/code_samples/kotlin_demo" name="kotlin_demo">
-                <projects>
-                  <project path="$PROJECT_DIR$/code_samples/kotlin_demo" />
                 </projects>
               </build>
               <build path="$PROJECT_DIR$/code_samples/live_templates" name="live_templates">
@@ -110,22 +100,17 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
-        <option name="delegatedBuild" value="true" />
-        <option name="testRunner" value="GRADLE" />
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/code_samples/_gradleCompositeBuild" />
-        <option name="gradleJvm" value="11" />
+        <option name="gradleJvm" value="17" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/code_samples/_gradleCompositeBuild" />
             <option value="$PROJECT_DIR$/code_samples/action_basics" />
-            <option value="$PROJECT_DIR$/code_samples/comparing_references_inspection" />
+            <option value="$PROJECT_DIR$/code_samples/comparing_string_references_inspection" />
             <option value="$PROJECT_DIR$/code_samples/conditional_operator_intention" />
             <option value="$PROJECT_DIR$/code_samples/editor_basics" />
             <option value="$PROJECT_DIR$/code_samples/facet_basics" />
             <option value="$PROJECT_DIR$/code_samples/framework_basics" />
-            <option value="$PROJECT_DIR$/code_samples/inspection_basics" />
-            <option value="$PROJECT_DIR$/code_samples/kotlin_demo" />
             <option value="$PROJECT_DIR$/code_samples/live_templates" />
             <option value="$PROJECT_DIR$/code_samples/max_opened_projects" />
             <option value="$PROJECT_DIR$/code_samples/module" />

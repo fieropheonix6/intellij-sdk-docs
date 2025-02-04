@@ -1,15 +1,16 @@
-[//]: # (title: XML DOM API)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# XML DOM API
 
-<!-- TODO content: DOM <=> PSI, Go To Symbol, editor gutter icon->DOM -->
+<link-summary>Implementing APIs for accessing XML models.</link-summary>
 
+[//]: # (TODO content: DOM <=> PSI, Go To Symbol, editor gutter icon->DOM)
 
 This article is intended for plugin writers who create custom web server integrations, or some UI for easy XML editing.
 It describes the *Document Object Model* (DOM) in IntelliJ Platform - an easy way to work with DTD or Schema-based XML models.
 The following topics will be covered: working with DOM itself (reading/writing tags content, attributes, and subtags) and easy XML editing in the UI by connecting UI to DOM.
 
-It's assumed that the reader is familiar with Java, Swing, IntelliJ Platform XML PSI (classes [`XmlTag`](%gh-ic%/xml/xml-psi-api/src/com/intellij/psi/xml/XmlTag.java), [`XmlFile`](%gh-ic%/xml/xml-psi-api/src/com/intellij/psi/xml/XmlFile.java), [`XmlTagValue`](%gh-ic%/xml/xml-psi-api/src/com/intellij/psi/xml/XmlTagValue.java), etc.), IntelliJ Platform plugin development basics (application and project components, file editors).
+It's assumed that the reader is familiar with Java, Swing, IntelliJ Platform XML PSI (classes [`XmlTag`](%gh-ic%/xml/xml-psi-api/src/com/intellij/psi/xml/XmlTag.java), [`XmlFile`](%gh-ic%/xml/xml-psi-api/src/com/intellij/psi/xml/XmlFile.java), [`XmlTagValue`](%gh-ic%/xml/xml-psi-api/src/com/intellij/psi/xml/XmlTagValue.java), etc.), IntelliJ Platform plugin development basics (application and project components, [file editors](editors.md)).
 
 ## XML PSI vs DOM
 
@@ -88,7 +89,7 @@ Register it in <path>[plugin.xml](plugin_configuration_file.md)</path> using `co
 
 > When targeting 2019.1 or earlier, use `com.intellij.dom.fileDescription` extension point instead.
 >
-{type="note"}
+{style="note"}
 
 You can now get the file element from [`DomManager`](%gh-ic%/xml/dom-openapi/src/com/intellij/util/xml/DomManager.java).
 To get the "239" value, you only have to write the following code:
@@ -414,7 +415,7 @@ Finally, `getChooserTypes()` just returns all the types that could be returned b
 
 To make your `TypeChooser` work, register it in your overridden `DomFileDescription.initializeFileDescription()` method by calling `registerTypeChooser()`.
 
-### Useful Methods of DomElement and DomManager
+### Useful Methods of `DomElement` and `DomManager`
 
 #### PSI Connection
 
@@ -481,7 +482,7 @@ You need to implement the [`DomElementAnnotator`](%gh-ic%/xml/dom-openapi/src/co
 In `DomElementsAnnotator.annotate(DomElement element, DomElementsProblemsHolder annotator)` you should report about all errors and warnings in the element's subtree to the annotator (`DomElementsProblemsHolder.createProblem()`).
 You should return this annotator in the corresponding virtual method of the `DomFileDescription`.
 
-#### Automatic Highlighting (BasicDomElementsInspection)
+#### Automatic Highlighting (`BasicDomElementsInspection`)
 
 The following errors can be highlighted automatically by providing an instance of `BasicDomElementsInspection`:
 
@@ -624,23 +625,23 @@ Depending on implementation/plugin, providing filesets implicitly (using existin
 
 Extend [`DomModelFactory`](%gh-ic%/xml/dom-openapi/src/com/intellij/util/xml/model/impl/DomModelFactory.java) (or [`BaseDomModelFactory`](%gh-ic%/xml/dom-openapi/src/com/intellij/util/xml/model/impl/BaseDomModelFactory.java) for non-`Module` scope) and provide implementation of your `DomModel`.
 Usually you will want to add searcher/utility methods to work with your `DomModel` implementation.
-Example can be found in Struts 2 plugin (package `com.intellij.struts2.dom.struts.model`).
 
 ### DOM Stubs
 
 > Please use it sparingly and only for heavily accessed parts in your DOM model, as it increases disk space usage/indexing run time.
 >
-{type="note"}
+{style="note"}
 
 DOM elements can be stubbed, so (costly) access to XML/PSI is not necessary (see [Indexing and PSI Stubs](indexing_and_psi_stubs.md) for similar feature for custom languages).
 Performance relevant elements, tag or attribute getters can simply be annotated with `@com.intellij.util.xml.Stubbed`.
 Set and increase `stubVersion` of `com.intellij.dom.fileMetaData` extension whenever you change `@Stubbed` annotations usage in your DOM hierarchy to trigger proper rebuilding of Stubs during indexing.
 
-## Building a DOM-Based GUI
+## Building a DOM-Based GUI {collapsible="true"}
+<primary-label ref="Deprecated"/>
 
 > This API is unmaintained and will likely be removed in future versions.
 >
-{type="warning"}
+{style="warning"}
 
 ### Forms
 
@@ -688,14 +689,14 @@ This method understands which control to create by using DOM reflection (`DomGen
 But sometimes you may want to create the controls directly.
 So let's look at the simple controls more closely.
 
-##### BooleanControl
+##### `BooleanControl`
 
 It allows you to edit boolean values.
 The control is bound to `JCheckBox`.
 
 ![BooleanControl](booleancontrol.gif)
 
-##### ComboControl
+##### `ComboControl`
 
 The control is bound to a non-editable `JComboBox`, so it can be used to choose something from a limited set.
 One case of such a limited set is enum.
@@ -707,7 +708,7 @@ Or you can just delegate to that renderer in your own way.
 
 ![ComboControl](combocontrol.gif)
 
-##### BooleanEnumControl
+##### `BooleanEnumControl`
 
 Sometimes, when there are only 2 alternatives, it's convenient to use a checkbox instead of a combobox.
 This control is designed specially for such cases.
@@ -721,7 +722,7 @@ If you set the parameter to `true`, the states will swap.
 Please note that editor-based controls are built on IntelliJ Platform's `Editor` instead of standard `JTextField`.
 Since there's currently no way to instantiate Editor directly through the Open API, controls are bound to special `JPanel` inheritors, and their `bind()` method adds the necessary content to those panels.
 
-##### TextControl
+##### `TextControl`
 
 This control allows you to edit simple string values.
 The control is bound to a `TextPanel` component.
@@ -730,7 +731,7 @@ If you bind a `StringControl` to it, a big editor will appear on the screen.
 In case you don't have space for a big editor, bind it to a `BigTextPanel`.
 Then it will be filled with a text editor, and the browse button will be added to open a dialog with the big editor where you can type a longer string.
 
-##### PsiClassControl
+##### `PsiClassControl`
 
 This is a one-line editor with a browse button that opens the standard class selection dialog.
 The control accepts class names only.
@@ -738,7 +739,7 @@ It is bound to `PsiClassPanel`.
 
 ![PsiClassControl](psiclasscontrol.gif)
 
-##### PsiTypeControl
+##### `PsiTypeControl`
 
 This is almost the same as PsiClassControl, but allows entering not only class names, but also Java primitive types and even arrays.
 It is bound to `PsiTypePanel`.
@@ -854,6 +855,5 @@ The following bundled open-source plugins make (heavy) use of DOM:
 - [Ant](%gh-ic%/plugins/ant)
 - [Plugin DevKit](%gh-ic%/plugins/devkit/devkit-core)
 - [Maven](%gh-ic%/plugins/maven)
-- [Struts 2](https://github.com/JetBrains/intellij-plugins/tree/master/struts2) (Ultimate Edition)
 
 Explore 3rd party plugins using DOM on [IntelliJ Platform Explorer](https://jb.gg/ipe?extensions=com.intellij.dom.fileMetaData).

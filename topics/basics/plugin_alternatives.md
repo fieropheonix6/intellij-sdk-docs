@@ -1,8 +1,8 @@
-[//]: # (title: Alternatives to Implementing a Plugin)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Alternatives to Implementing a Plugin
 
-<excerpt>Alternative strategies and tools to avoid building a "full" plugin.</excerpt>
+<link-summary>Alternative strategies and tools to avoid building a "full" plugin.</link-summary>
 
 In some cases, implementing an actual IntelliJ Platform plugin can be overkill, and using one of the alternative approaches listed below may provide you with the required value in a much shorter time.
 If you need a functionality that is specific to your project domain, conventions, or practices, you can avoid all the steps that are required to implement and publish a plugin and provide these features as a part of your project or IDE configuration files.
@@ -21,11 +21,11 @@ A single inspection can use multiple search and replacement templates.
 Once SSR inspections are created and configured, they can be shared with other team members via [inspection profiles](https://www.jetbrains.com/help/idea/customizing-profiles.html).
 
 SSR inspections can be created only for languages providing SSR support.
-To verify if a given language supports SSR, invoke the <menupath>Edit | Find | Search Structurally...</menupath> action in an IDE supporting the language, and check if it is present in the <control>Language</control> select list.
+To verify if a given language supports SSR, invoke the <ui-path>Edit | Find | Search Structurally...</ui-path> action in an IDE supporting the language, and check if it is present in the <control>Language</control> select list.
 
 > See the [I(J)nspector](https://ijnspector.wordpress.com/) blog for practical SSR templates examples.
 >
-{type="note"}
+{style="note"}
 
 ## IDE Scripting Console
 
@@ -35,13 +35,16 @@ Scripts can access the IntelliJ Platform APIs and can be implemented in Kotlin, 
 Created scripts are stored in the [IDE configuration directory](https://www.jetbrains.com/help/idea/directories-used-by-the-ide-to-store-settings-caches-plugins-and-logs.html#config-directory) and can't be shared as part of project files or configuration.
 
 ## Flora Plugin
+<secondary-label ref="incubating"/>
 
 The [Flora](https://plugins.jetbrains.com/plugin/17669-flora-beta-) plugin allows for developing project-specific extensions as Kotlin Script (<path>\*.kts</path>) or JavaScript (<path>\*.js</path>) files.
 Flora extensions have access to all available IntelliJ Platform APIs, just like a regular plugin.
 
 Every extension is represented by a single file and stored directly in a project's <path>.plugins</path> directory.
 Extensions can be easily shared with other team members by adding the <path>.plugins</path> directory to VCS.
-Also, adding the Flora plugin in the <menupath>Settings/Preferences | Build, Execution, Deployment | Required Plugins</menupath> and sharing this configuration as part of a project makes it effortless to deliver additional IDE functionalities to your team without any manual setup.
+Also, adding the Flora plugin in the <ui-path>Settings | Build, Execution, Deployment | Required Plugins</ui-path> and sharing this configuration as part of a project makes it effortless to deliver additional IDE functionalities to your team without any manual setup.
+
+> Please note that the Flora plugin is in an experimental state.
 
 ## LivePlugin
 
@@ -55,7 +58,7 @@ Additionally, if they are stored in a project's <path>.live-plugins</path> direc
 
 > See the LivePlugin [description](https://dmitrykandalov.com/liveplugin), [presentation](https://www.youtube.com/watch?v=GcYa4lMRta0), and [extensions examples](https://github.com/dkandalov/live-plugin#more-examples) for more information.
 >
-{type="note"}
+{style="note"}
 
 ## PhpStorm Advanced Metadata
 

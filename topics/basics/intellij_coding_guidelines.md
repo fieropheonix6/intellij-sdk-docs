@@ -1,6 +1,8 @@
-[//]: # (title: IntelliJ Platform Coding Guidelines)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# IntelliJ Platform Coding Guidelines
+
+<link-summary>Coding guidelines for the code contributed to the IntelliJ Platform.</link-summary>
 
 If you are writing code that you would like to contribute to the IntelliJ Platform, following these guidelines will make it easier for the JetBrains development team to review and accept your changes.
 
@@ -34,10 +36,10 @@ The easiest way to follow our code formatting guidelines is to reformat your cod
 The IntelliJ IDEA Community Edition project includes a shared inspection profile.
 We strongly recommend making sure that the code you submit does not contain any warnings highlighted by the inspections configured in that inspection profile.
 
-## JavaDoc Comments
+## Javadoc Comments
 
-If your code adds new OpenAPI interfaces, classes, methods, or extension points, you must provide JavaDoc comments describing the parameters and intended usage of the APIs.
-Providing JavaDoc or other comments for other parts of the code is a good idea but isn't required.
+If your code adds new OpenAPI interfaces, classes, methods, or extension points, you must provide Javadoc comments describing the parameters and intended usage of the APIs.
+Providing Javadoc or other comments for other parts of the code is a good idea but isn't required.
 
 ## Commits
 

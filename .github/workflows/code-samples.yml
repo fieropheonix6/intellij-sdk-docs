@@ -7,35 +7,31 @@ on:
     paths: [ 'code_samples/**','.github/workflows/code-samples.yml' ]
 
 env:
-  PLUGIN_VERIFIER_IDE_VERSIONS: '2021.3.3 2022.1.4 2022.2'
+  PLUGIN_VERIFIER_IDE_VERSIONS: '2024.1.7 2024.2.4 2024.3'
 
 jobs:
 
-  gradleValidation:
-    name: Gradle Wrappers
+  checkout:
+    name: Checkout
     runs-on: ubuntu-latest
     steps:
       - name: Fetch Sources
-        uses: actions/checkout@v3
-      - name: Gradle Wrapper Validation
-        uses: gradle/wrapper-validation-action@v1.0.4
+        uses: actions/checkout@v4
 
   samples:
     name: Code Samples / ${{ matrix.plugin }}
-    needs: gradleValidation
+    needs: checkout
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         plugin:
           - action_basics
-          - comparing_references_inspection
+          - comparing_string_references_inspection
           - conditional_operator_intention
           - editor_basics
           - facet_basics
           - framework_basics
-          - inspection_basics
-          - kotlin_demo
           - live_templates
           - max_opened_projects
           - module
@@ -49,12 +45,12 @@ jobs:
           - tree_structure_provider
     steps:
       - name: Fetch Sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: zulu
-          java-version: 11
+          java-version: 17
 
       - name: Verify Plugin
         run: (cd code_samples/${{ matrix.plugin }}; ./gradlew verifyPlugin)
@@ -65,8 +61,8 @@ jobs:
         id: properties
         shell: bash
         run: |
-          echo "::set-output name=ideVersions::${PLUGIN_VERIFIER_IDE_VERSIONS// /-}"
-          echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
+          echo "ideVersions=${PLUGIN_VERIFIER_IDE_VERSIONS// /-}" >> $GITHUB_OUTPUT
+          echo "pluginVerifierHomeDir=~/.pluginVerifier" >> $GITHUB_OUTPUT
 
       - name: Run Plugin Verifier
         run: |
@@ -74,6 +70,7 @@ jobs:
           tasks {
             runPluginVerifier {
               ideVersions.set("\"$PLUGIN_VERIFIER_IDE_VERSIONS\"".split(' ').toList())
+              freeArgs.set(listOf(\"-mute\", \"TemplateWordInPluginId\"))
             }
           }
           " >> code_samples/${{ matrix.plugin }}/build.gradle.kts
@@ -82,7 +79,7 @@ jobs:
 
       - name: Collect Plugin Verifier Result
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.plugin }}-pluginVerifier-result
           path: ${{ github.workspace }}/code_samples/${{ matrix.plugin }}/build/reports/pluginVerifier

@@ -1,47 +1,52 @@
-[//]: # (title: User Interface Components)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# User Interface Components
 
-The IntelliJ Platform includes a large number of custom Swing components.
+<link-summary>Introduction to UI Components provided by IntelliJ Platform.</link-summary>
+
+<tldr>
+
+**UI Guidelines:** [Overview](ui_guidelines_welcome.topic)
+
+</tldr>
+
+The IntelliJ Platform includes a large number of custom [Swing](https://en.wikipedia.org/wiki/Swing_(Java)) components.
 Using those components in your plugins will ensure that your plugin looks and works consistently with the UI of the rest of the IDE, and can often reduce the code size compared to using the default Swing components.
+Use inspection <ui-path>Plugin DevKit | Code | Undesirable class usage</ui-path> to highlight replacement components provided by the platform.
+
+<snippet id="inspectingExistingUI">
 
 > Use [UI Inspector](internal_ui_inspector.md) to locate the underlying Swing component implementation or to inspect an existing UI at runtime.
 >
-{type="tip"}
+{title="Inspecting existing UI"}
 
-> It is recommended to build UI forms like dialogs or settings pages by using the [Kotlin UI DSL](kotlin_ui_dsl_version_2.md) (IntelliJ Platform 2021.3+).
+</snippet>
+
+> UI forms like [](dialog_wrapper.md) or [](settings.md) should use [Kotlin UI DSL](kotlin_ui_dsl_version_2.md) (IntelliJ Platform 2021.3+).
 >
-> Using GUI designer with Kotlin is currently not supported ([Issue](https://youtrack.jetbrains.com/issue/KTIJ-791)).
+> Using _UI Designer_ plugin with Kotlin is [not supported](https://youtrack.jetbrains.com/issue/KTIJ-791).
 >
-{type="note"}
+{style="note"}
 
-Please refer to [Writing short and clear](https://jetbrains.design/intellij/text/writing_short/) in IntelliJ Platform UI Guidelines on writing UI-related texts.
+Please refer to [](writing_short.md) in UI Guidelines on writing UI-related texts.
 
-> See [UI Kit](https://jetbrains.design/intellij/resources/UI_kit/) when using [Figma](https://www.figma.com) to design UI.
->
-{type="tip"}
-
+See [](UI_kit.md) when using [Figma](https://www.figma.com) to design UI.
 
 The following components are particularly noteworthy:
 
-*  Menus and toolbars are built using the [](basic_action_system.md)
-*  [](tool_windows.md)
-*  [](dialog_wrapper.md)
-*  [](popups.md)
-*  [](notifications.md)
-*  [](file_and_class_choosers.md)
-*  [](editor_components.md)
-*  [](lists_and_trees.md)
-*  [](status_bar_widgets.md)
-*  Tables (TableView) (TBD)
-*  Drag & Drop Helpers (TBD)
-*  [](misc_swing_components.md)
-    *  Messages
-    *  JBSplitter
-    *  JBTabs
+* Menus and toolbars are built using [](basic_action_system.md)
+* [](tool_windows.md)
+* [](dialog_wrapper.md)
+* [](popups.md)
+* [](notifications.md)
+* [](file_and_class_choosers.md)
+* [](editor_components.md)
+* [](lists_and_trees.md)
+* [](status_bar_widgets.md)
+* Tables (TableView) (TBD)
+* Drag & Drop Helpers (TBD)
+* [](misc_swing_components.md)
 
-> If a topic you are interested in is not covered in the above sections, let us know via the "**Was this page helpful?**" feedback form below or [other channels](getting_help.md#problems-with-the-guide).
->
-> Please be specific about the topics and reasons for adding them, and leave your email in case we need more details.
->
-{type="note"}
+See also [](ui_faq.md).
+
+<include from="snippets.md" element-id="missingContent"/>

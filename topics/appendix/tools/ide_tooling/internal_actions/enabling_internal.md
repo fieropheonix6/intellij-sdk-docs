@@ -1,22 +1,24 @@
-[//]: # (title: Enabling Internal Mode)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Enabling Internal Mode
 
-There are useful tools, such as the Internal Actions menu, that are only visible if internal mode is enabled in IntelliJ IDEA.
+<link-summary>Enabling the Internal Mode enables actions and tools useful in plugin development and diagnosing issues.</link-summary>
+
+There are useful tools, such as the <control>Internal Actions</control> menu, that are only visible if the internal mode is enabled in the IDE.
 
 <procedure title="Configuring Internal Mode">
 
-1. Start IntelliJ IDEA.
-2. From the main menu, select <menupath>Help | Edit Custom Properties</menupath>.
-  This selection opens IntelliJ IDEA's <path>idea.properties</path> file.
-  If it does not exist, IntelliJ IDEA will prompt to create one.
+1. Start the IDE.
+2. From the main menu, select <ui-path>Help | Edit Custom Properties...</ui-path>.
+   This selection opens the <path>idea.properties</path> file.
+   If it does not exist, the IDE will prompt to create one.
 3. Add the line shown below to the <path>idea.properties</path> file:
+   ```properties
+   idea.is.internal=true
+   ```
 
-```properties
-idea.is.internal=true
-```
-4. Save the <path>idea.properties</path> file and restart IntelliJ IDEA.
+4. Save the <path>idea.properties</path> file and restart the IDE.
 
-5. The Internal Actions menu is now available in <menupath>Tools | Internal Actions</menupath>.
+5. The Internal Actions menu is now available in <ui-path>Tools | Internal Actions</ui-path>.
 
 </procedure>

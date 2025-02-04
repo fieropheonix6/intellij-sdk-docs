@@ -1,21 +1,23 @@
-[//]: # (title: 5. Formatter Test)
+<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 5. Formatter Test
 
-<microformat>
+<link-summary>Implementing and running test for the formatter implemented as a part of the Custom Language Support Tutorial.</link-summary>
+
+<tldr>
 
 **Tested Functionality**: [](formatter.md)
 
-</microformat>
+</tldr>
 
-<include src="tests_prerequisites.md" include-id="custom_language_testing_tutorial_header"></include>
+<include from="tests_prerequisites.md" element-id="custom_language_testing_tutorial_header"></include>
 
 See also [`FormatterTestCase`](%gh-ic%/platform/testFramework/src/com/intellij/psi/formatter/FormatterTestCase.java) as convenient base class.
 
 ## Define Test Data
 Create the <path>FormatterTestData.simple</path> file in the <path>testData</path> directory.
 
-```bash
+```properties
 ```
 {src="simple_language_plugin/src/test/testData/FormatterTestData.simple"}
 
@@ -31,4 +33,5 @@ Add the `testFormatter()` method to the `SimpleCodeInsightTest` class [previousl
 {src="simple_language_plugin/src/test/java/org/intellij/sdk/language/SimpleCodeInsightTest.java" include-symbol="testFormatter"}
 
 ## Run the Test
-[Run](parsing_test.md#run-the-test) the test and make sure it's green.
+
+<include from="custom_language_testing_snippets.md" element-id="runTests"/>

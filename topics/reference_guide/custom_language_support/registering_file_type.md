@@ -1,6 +1,14 @@
-[//]: # (title: Registering a File Type)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Registering a File Type
+
+<link-summary>Registering a language file type associating file extensions and patterns with a language.</link-summary>
+
+<tldr>
+
+**Product Help:** [File type associations](https://www.jetbrains.com/help/idea/creating-and-registering-file-types.html)
+
+</tldr>
 
 The first step in developing a custom language plugin is registering a file type associated with the language.
 
@@ -11,27 +19,27 @@ A custom language file type is a class derived from [`LanguageFileType`](%gh-ic%
 ### Registration
 <tabs>
 
-<tab title="2019.2 and later">
+<tab title="2019.2+">
 
-When targeting 2019.2 or later *only*, use `com.intellij.fileType` extension point to register `LanguageFileType` implementation and instance via `implementationClass` and `fieldName` attributes.
+Use `com.intellij.fileType` extension point to register `LanguageFileType` implementation and instance via `implementationClass` and `fieldName` attributes.
 Also, `name` and `language` must be declared matching `FileType.getName()` and ID of language returned from `LanguageFileType.getLanguage()`, respectively.
 
-To associate the file type in the IDE, specify one or more associations as listed in the following table.
+To associate the file type in the IDE, specify one or more associations listed in the following table.
 
-| Association type        | Attribute                                   | Attribute value                                                 |
-|-------------------------|---------------------------------------------|-----------------------------------------------------------------|
-| Filename extension(s)   | `extensions`                                | Semicolon-separated list of extensions, without `.` prefix      |
-| Hard coded file name(s) | `fileNames`/<br/>`fileNamesCaseInsensitive` | Semicolon-separated list of exact (case-insensitive) file names |
-| Filename pattern(s)     | `patterns`                                  | Semicolon-separated list of patterns (`*` and `?`)              |
-| Hashbang _(2020.2+)_    | `hashBangs`                                 | Semicolon-separated list of hash bang patterns                  |
+| Association type        | Attribute                                          | Attribute value                                                 |
+|-------------------------|----------------------------------------------------|-----------------------------------------------------------------|
+| Filename extension(s)   | `extensions`                                       | Semicolon-separated list of extensions, without `.` prefix      |
+| Hard coded file name(s) | <p>`fileNames`/<br/>`fileNamesCaseInsensitive`</p> | Semicolon-separated list of exact (case-insensitive) file names |
+| Filename pattern(s)     | `patterns`                                         | Semicolon-separated list of patterns (`*` and `?`)              |
+| Hashbang _(2020.2+)_    | `hashBangs`                                        | Semicolon-separated list of hash bang patterns                  |
 
 </tab>
 
-<tab title="Pre-2019.2">
+<tab title="Earlier versions">
 
 > The `FileTypeFactory` approach is deprecated. Use it only when the plugin supports platform versions older than 2019.2.
 >
-{type="warning"}
+{style="warning"}
 
 To register a file type, the plugin developer provides a subclass of [`FileTypeFactory`](%gh-ic%/platform/ide-core/src/com/intellij/openapi/fileTypes/FileTypeFactory.java), which is registered via the `com.intellij.fileTypeFactory` extension point.
 
@@ -42,7 +50,7 @@ To register a file type, the plugin developer provides a subclass of [`FileTypeF
 - [Custom Language Support Tutorial: Language and File Type](language_and_filetype.md)
 - [`LanguageFileType`](%gh-ic%/platform/core-api/src/com/intellij/openapi/fileTypes/LanguageFileType.java) subclass in [Properties language plugin](%gh-ic%/plugins/properties/properties-psi-api/src/com/intellij/lang/properties/PropertiesFileType.java)
 
-To verify that the file type is registered correctly, you can implement the [`LanguageFileType.getIcon()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/fileTypes/LanguageFileType.java) method and verify that the correct icon (see [Working with Icons and Images](work_with_icons_and_images.md)) is displayed for files associated with your file type.
+To verify that the file type is registered correctly, you can implement the [`LanguageFileType.getIcon()`](%gh-ic%/platform/core-api/src/com/intellij/openapi/fileTypes/LanguageFileType.java) method and verify that the correct icon (see [](icons.md)) is displayed for files associated with your file type.
 
 ### Additional Features
 

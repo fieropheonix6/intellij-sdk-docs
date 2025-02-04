@@ -1,6 +1,14 @@
-[//]: # (title: Find Usages)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Find Usages
+
+<link-summary>Introduction to implementing Find Usages action in custom languages.</link-summary>
+
+<tldr>
+
+**Product Help:** [Find Usages](https://www.jetbrains.com/help/idea/find-highlight-usages.html)
+
+</tldr>
 
 The _Find Usages_ action is a multi-step process, and each step of the process requires involvement from the custom language plugin.
 
@@ -8,7 +16,6 @@ The language plugin participates in the Find Usages process by registering an im
 
 > In cases like function parameters and local variables, consider overriding  [`PsiElement.getUseScope()`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiElement.java) to return a narrower scope.
 > For instance, returning the scope of the nearest function definition can significantly reduce the number of files that need to be parsed and references that need to be resolved when renaming such elements.
-{type="tip"}
 
 The steps of the _Find Usages_ action are the following:
 * Before the _Find Usages_ action can be invoked, the IDE builds an index of words present in every file in the custom language.
@@ -30,7 +37,7 @@ The steps of the _Find Usages_ action are the following:
   The text shown for each found element is taken from the [`FindUsagesProvider.getNodeText()`](%gh-ic%/platform/indexing-api/src/com/intellij/lang/findUsages/FindUsagesProvider.java) method.
   To group results by type, implement [`UsageTypeProvider`](%gh-ic%/platform/usageView-impl/src/com/intellij/usages/impl/rules/UsageTypeProvider.java) and register in `com.intellij.usageTypeProvider` extension point to provide custom or predefined [`UsageType`](%gh-ic%/platform/usageView/src/com/intellij/usages/impl/rules/UsageType.java).
 
-**Examples**:
+**Examples:**
 - Implementation of [`FindUsagesProvider`](%gh-ic%/plugins/properties/properties-psi-impl/src/com/intellij/lang/properties/findUsages/PropertiesFindUsagesProvider.java) in [Properties language plugin](%gh-ic%/plugins/properties)
 - [Custom Language Support Tutorial: Find Usages](find_usages_provider.md)
 

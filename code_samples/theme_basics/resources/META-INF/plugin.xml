@@ -6,21 +6,21 @@
   <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
   <id>org.intellij.sdk.themeBasics</id>
 
-  <!-- Text to display as name on Preferences/Settings | Plugin page -->
+  <!-- Text to display as name on Settings | Plugin page -->
   <name>SDK: Theme Basics</name>
 
   <!-- The version of this plugin -->
   <version>0.1</version>
 
-  <!-- Compatible with the following versions of IntelliJ Platform: version 2021.2 and newer. -->
-  <idea-version since-build="212"/>
+  <!-- Compatible with the following versions of IntelliJ Platform: version 2022.1 and newer. -->
+  <idea-version since-build="221"/>
 
   <!-- Indicate this plugin can be loaded in all IntelliJ Platform-based products. -->
   <depends>com.intellij.modules.platform</depends>
 
   <description>
     <![CDATA[
-      IntelliJ Platform SDK code sample to illustrate creating <em>UI Themes</em>.
+      IntelliJ Platform SDK code sample to illustrate creating <em>themes</em>.
     ]]>
   </description>
   <change-notes>
@@ -31,7 +31,7 @@
     ]]>
   </change-notes>
 
-  <!-- Text to display as company information on Preferences/Settings | Plugin page -->
+  <!-- Text to display as company information on Settings | Plugin page -->
   <vendor url="https://plugins.jetbrains.com">IntelliJ Platform SDK</vendor>
 
   <extensions defaultExtensionNs="com.intellij">

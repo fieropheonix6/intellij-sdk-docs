@@ -1,12 +1,16 @@
-[//]: # (title: Syntax Errors)
+# Syntax Errors
 
 <!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+
+<link-summary>Suppressing syntax errors in the editor programmatically.</link-summary>
 
 The IntelliJ Platform provides a mechanism for analyzing the PSI tree and highlighting syntax errors out of the box.
 
 While the PSI tree for the code is being built, a [parser](implementing_parser_and_psi.md) tries to consume tokens according to language grammar.
 When it encounters a syntax error, like an unexpected token, a [`PsiErrorElement`](%gh-ic%/platform/core-api/src/com/intellij/psi/PsiErrorElement.java) is created and added to the PSI tree with an appropriate error description.
 In the code analysis daemon, the IDE visits every PSI element in the tree, and when a `PsiErrorElement` is encountered, information about it is collected and used while highlighting the code in the editor.
+
+> Additional highlighting can also be added using [Annotators](syntax_highlighting_and_error_highlighting.md#syntax) or Inspections, see [Controlling Highlighting](controlling_highlighting.md) on how to suppress.
 
 ## Controlling Syntax Errors Highlighting
 

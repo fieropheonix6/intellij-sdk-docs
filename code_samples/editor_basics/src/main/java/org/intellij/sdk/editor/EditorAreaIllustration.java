@@ -1,7 +1,8 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 package org.intellij.sdk.editor;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -12,10 +13,13 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * If conditions support it, makes a menu visible to display information about the caret.
- *
- * @see AnAction
  */
 public class EditorAreaIllustration extends AnAction {
+
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.BGT;
+  }
 
   /**
    * Displays a message with information about the current caret.
@@ -34,8 +38,8 @@ public class EditorAreaIllustration extends AnAction {
     VisualPosition visualPos = primaryCaret.getVisualPosition();
     int caretOffset = primaryCaret.getOffset();
     // Build and display the caret report.
-    String report = logicalPos.toString() + "\n" + visualPos.toString() + "\n" +
-            "Offset: " + caretOffset;
+    String report = logicalPos + "\n" + visualPos + "\n" +
+        "Offset: " + caretOffset;
     Messages.showInfoMessage(report, "Caret Parameters Inside The Editor");
   }
 
@@ -53,7 +57,7 @@ public class EditorAreaIllustration extends AnAction {
     // Get required data keys
     final Project project = e.getProject();
     final Editor editor = e.getData(CommonDataKeys.EDITOR);
-    //Set visibility only in case of existing project and editor
+    // Set visibility only in case of existing project and editor
     e.getPresentation().setEnabledAndVisible(project != null && editor != null);
   }
 

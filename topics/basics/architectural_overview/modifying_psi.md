@@ -1,6 +1,8 @@
-[//]: # (title: Modifying the PSI)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Modifying the PSI
+
+<link-summary>Creating, deleting, and modifying PSI elements.</link-summary>
 
 The PSI is a read/write representation of the source code as a tree of elements corresponding to a source file's structure.
 You can modify the PSI by *adding*, *replacing*, and *deleting* PSI elements.
@@ -17,7 +19,9 @@ In the most general case, you use the `createFileFromText()` method of [`PsiFile
 See also [](psi_files.md#how-do-i-create-a-psi-file).
 
 Most languages provide factory methods that let you create specific code constructs more easily.
-For example, the [`PsiJavaParserFacade`](%gh-ic%/java/java-psi-api/src/com/intellij/psi/PsiJavaParserFacade.java) class contains methods such as `createMethodFromText()`, which creates a Java method from the given text.
+Examples:
+* [`PsiJavaParserFacade`](%gh-ic%/java/java-psi-api/src/com/intellij/psi/PsiJavaParserFacade.java) class contains methods such as `createMethodFromText()`, which creates a Java method from the given text
+* [`SimpleElementFactory.createProperty()`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/psi/SimpleElementFactory.java) creating a Simple language property
 
 When you're implementing refactorings, [intentions](code_intentions.md), or inspection [quickfixes](code_inspections_and_intentions.md) that work with existing code, the text that you pass to the various `createFromText()` methods will combine hard-coded fragments and fragments of code taken from the existing file.
 For small code fragments (individual identifiers), you can simply append the text from the existing code to the text of the code fragment you are building.
@@ -33,27 +37,11 @@ For larger code fragments, it's best to perform the modification in several step
 This ensures that the user code's formatting is preserved and that the modification does not introduce any unwanted whitespace changes.
 Just as everywhere else in the IntelliJ Platform API, the text passed to `createFileFromText()` and other `createFromText()` methods must use only `\n` as line separators.
 
-As an example of this approach, see the quickfix in the `ComparingReferencesInspection` [example](code_inspections.md):
+As an example of this approach, see the quickfix in the `ComparingStringReferencesInspection` [example](code_inspections.md):
 
 ```java
-// binaryExpression holds a PSI expression of the form "x == y", which needs to be replaced with "x.equals(y)"
-PsiBinaryExpression binaryExpression = (PsiBinaryExpression) descriptor.getPsiElement();
-IElementType opSign = binaryExpression.getOperationTokenType();
-PsiExpression lExpr = binaryExpression.getLOperand();
-PsiExpression rExpr = binaryExpression.getROperand();
-
-// Step 1: Create a replacement fragment from text, with "a" and "b" as placeholders
-PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-PsiMethodCallExpression equalsCall =
-    (PsiMethodCallExpression) factory.createExpressionFromText("a.equals(b)", null);
-
-// Step 2: replace "a" and "b" with elements from the original file
-equalsCall.getMethodExpression().getQualifierExpression().replace(lExpr);
-equalsCall.getArgumentList().getExpressions()[0].replace(rExpr);
-
-// Step 3: replace a larger element in the original file with the replacement tree
-PsiExpression result = (PsiExpression) binaryExpression.replace(equalsCall);
 ```
+{src="comparing_string_references_inspection/src/main/java/org/intellij/sdk/codeInspection/ComparingStringReferencesInspection.java" include-symbol="applyFix"}
 
 ## Maintaining Tree Structure Consistency
 
