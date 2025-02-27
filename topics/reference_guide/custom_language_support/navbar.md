@@ -1,6 +1,14 @@
-[//]: # (title: Navigation Bar)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Navigation Bar
+
+<link-summary>Implementing custom navigation bars.</link-summary>
+
+<tldr>
+
+**Product Help:** [Navigation bar](https://www.jetbrains.com/help/idea/guided-tour-around-the-user-interface.html#navigation-bar)
+
+</tldr>
 
 The navigation bar implementation is used to customize and extend the
 [navigation bar](https://www.jetbrains.com/help/idea/guided-tour-around-the-user-interface.html#navigation-bar)
@@ -32,7 +40,7 @@ the name of the class at the current caret position.
 Inherit from it if you want to add navigation bar support to your language with support for specific file elements.
 
 > Don't forget to implement [](structure_view.md), this is necessary to build a file structure model based on which the navigation bar displays a specific element.
-{type="note"}
+{style="note"}
 
 In this case, you will also need to override the `getLanguage()` in addition to the two methods described earlier, this method returns the language instance for which this extension will work.
 
@@ -44,4 +52,4 @@ You probably won't need to override other methods unless you want to write your 
 Note that the `getSuitableClasses()` method on the structure view model class that implements `com.intellij.ide.structureView.TextEditorBasedStructureViewModel` (see [](structure_view.md))
 must return all the element types you want to display in the navigation bar.
 
-**Example**: [Custom Language Support Tutorial: Structure Aware Navigation Bar](structure_aware_navbar.md)
+**Example:** [Custom Language Support Tutorial: Structure Aware Navigation Bar](structure_aware_navbar.md)

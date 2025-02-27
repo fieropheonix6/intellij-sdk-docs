@@ -1,24 +1,25 @@
-[//]: # (title: 3. Completion Test)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 3. Completion Test
 
-<microformat>
+<tldr>
 
 **Tested Functionality**: [](reference_contributor.md)
 
-</microformat>
+</tldr>
 
-<include src="tests_prerequisites.md" include-id="custom_language_testing_tutorial_header"></include>
+<include from="tests_prerequisites.md" element-id="custom_language_testing_tutorial_header"></include>
 
 ## Define Test Data
 Create the <path>DefaultTestData.simple</path> file in the <path>testData</path> directory.
+This file contains test Simple language properties that will be completed in a test Java file (see the `Test` class later in this section).
 
-```bash
+```properties
 ```
 {src="simple_language_plugin/src/test/testData/DefaultTestData.simple"}
 
 Create a test input Java file <path>CompleteTestData.java</path> in the <path>testData</path> directory.
-This file contains a Simple Language reference within the Java code at `<caret>`.
+This file contains a Simple Language reference within the Java code at `<caret>` [special marker](test_project_and_testdata_directories.md#special-markup), which denotes the caret position to use in the test.
 
 ```java
 ```
@@ -33,7 +34,7 @@ Override `getTestDataPath()`, and return the path from the root of this plugin m
 {src="simple_language_plugin/src/test/java/org/intellij/sdk/language/SimpleCodeInsightTest.java" include-symbol="getTestDataPath"}
 
 
-At this point only one test is defined in `SimpleCodeInsightTest`: `testCompletion()`.
+At this point, only one test is defined in `SimpleCodeInsightTest`: `testCompletion()`.
 This method:
 * Configures the test using the two input files.
 * Calls the basic completion functionality.
@@ -45,7 +46,8 @@ This method:
 {src="simple_language_plugin/src/test/java/org/intellij/sdk/language/SimpleCodeInsightTest.java" include-symbol="testCompletion"}
 
 
-A number of related methods exist in `CodeInsightTestFixture` for testing completion and lookup elements, e.g., when testing completion variants and requiring only one testdata file `CodeInsightTestFixture.testCompletionVariants()`.
+A number of related methods exist in [`CodeInsightTestFixture`](%gh-ic%/platform/testFramework/src/com/intellij/testFramework/fixtures/CodeInsightTestFixture.java) for testing completion and lookup elements, e.g., when testing completion variants and requiring only one testdata file `CodeInsightTestFixture.testCompletionVariants()`.
 
 ## Run the Test
-[Run](parsing_test.md#run-the-test) the test and make sure it's green.
+
+<include from="custom_language_testing_snippets.md" element-id="runTests"/>

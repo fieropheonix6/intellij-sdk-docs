@@ -1,6 +1,8 @@
-[//]: # (title: PSI References)
+# PSI References
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+
+<link-summary>PSI Reference represents a link from a usage of a particular element in the code to the corresponding declaration.</link-summary>
 
 A *reference* in a PSI tree is an object that represents a link from a *usage* of a particular element in the code to the corresponding *declaration*. *Resolving* a reference means locating the declaration to which a specific usage refers.
 
@@ -9,7 +11,7 @@ For example, consider a simple Java method:
 
 ```java
 public void hello(String message) {
-    System.out.println(message);
+  System.out.println(message);
 }
 ```
 
@@ -36,7 +38,6 @@ If the code currently open in the IDE does not compile, or in other situations, 
 
 > Please see also [](psi_performance.md#cache-results-of-heavy-computations).
 >
-{type="tip"}
 
 ## Contributed References
 
@@ -44,7 +45,7 @@ In addition to references defined by the semantics of the programming language, 
 Consider the following example:
 
 ```java
-File f = new File("foo.txt");
+File file = new File("foo.txt");
 ```
 
 Here, "foo.txt" has no special meaning from the point of view of the Java syntax - it's just a string literal.

@@ -1,35 +1,30 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-
+// Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package org.intellij.sdk.view.pane;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.SelectInTarget;
 import com.intellij.ide.impl.ProjectViewSelectInTarget;
-import com.intellij.ide.projectView.BaseProjectTreeBuilder;
 import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.projectView.impl.AbstractProjectViewPSIPane;
-import com.intellij.ide.projectView.impl.ProjectAbstractTreeStructureBase;
-import com.intellij.ide.projectView.impl.ProjectTreeStructure;
-import com.intellij.ide.projectView.impl.ProjectViewTree;
-import com.intellij.ide.util.treeView.AbstractTreeBuilder;
-import com.intellij.ide.util.treeView.AbstractTreeUpdater;
+import com.intellij.ide.projectView.impl.*;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.tree.DefaultTreeModel;
 
-public class ImagesProjectViewPane extends AbstractProjectViewPSIPane {
+final class ImagesProjectViewPane extends ProjectViewPane {
 
   public static final String ID = "IMAGES";
 
-  protected ImagesProjectViewPane(Project project) {
+  ImagesProjectViewPane(Project project) {
     super(project);
   }
 
   @NotNull
   @Override
   public String getTitle() {
-    return "SDK-Images";
+    return "SDK Images";
   }
 
   @NotNull
@@ -77,7 +72,16 @@ public class ImagesProjectViewPane extends AbstractProjectViewPSIPane {
     return new ProjectTreeStructure(myProject, ID) {
       @Override
       protected ImagesProjectNode createRoot(@NotNull Project project, @NotNull ViewSettings settings) {
-        return new ImagesProjectNode(project);
+        return new ImagesProjectNode(project, settings, getProjectDir(project), ImagesProjectViewPane.this);
+      }
+
+      @NotNull
+      private static VirtualFile getProjectDir(Project project) {
+        VirtualFile guessedProjectDir = ProjectUtil.guessProjectDir(project);
+        if (guessedProjectDir == null) {
+          throw new IllegalStateException("Could not get project directory");
+        }
+        return guessedProjectDir;
       }
 
       // Children will be searched in async mode
@@ -97,19 +101,6 @@ public class ImagesProjectViewPane extends AbstractProjectViewPSIPane {
         return true;
       }
     };
-  }
-
-  //  Legacy code, awaiting refactoring of AbstractProjectViewPSIPane#createBuilder
-  @Override
-  protected BaseProjectTreeBuilder createBuilder(@NotNull DefaultTreeModel treeModel) {
-    return null;
-  }
-
-  //  Legacy code, awaiting refactoring of AbstractProjectViewPSIPane#createTreeUpdater
-  @NotNull
-  @Override
-  protected AbstractTreeUpdater createTreeUpdater(@NotNull AbstractTreeBuilder builder) {
-    throw new IllegalStateException("ImagesProjectViewPane tree is async now");
   }
 
 }

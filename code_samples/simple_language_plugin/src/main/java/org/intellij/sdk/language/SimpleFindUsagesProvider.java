@@ -1,4 +1,4 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 
 package org.intellij.sdk.language;
 
@@ -13,15 +13,14 @@ import org.intellij.sdk.language.psi.SimpleTokenSets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SimpleFindUsagesProvider implements FindUsagesProvider {
+final class SimpleFindUsagesProvider implements FindUsagesProvider {
 
-  @Nullable
   @Override
   public WordsScanner getWordsScanner() {
     return new DefaultWordsScanner(new SimpleLexerAdapter(),
-            SimpleTokenSets.IDENTIFIERS,
-            SimpleTokenSets.COMMENTS,
-            TokenSet.EMPTY);
+        SimpleTokenSets.IDENTIFIERS,
+        SimpleTokenSets.COMMENTS,
+        TokenSet.EMPTY);
   }
 
   @Override
@@ -58,8 +57,8 @@ public class SimpleFindUsagesProvider implements FindUsagesProvider {
   public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
     if (element instanceof SimpleProperty) {
       return ((SimpleProperty) element).getKey() +
-              SimpleAnnotator.SIMPLE_SEPARATOR_STR +
-              ((SimpleProperty) element).getValue();
+          SimpleAnnotator.SIMPLE_SEPARATOR_STR +
+          ((SimpleProperty) element).getValue();
     }
     return "";
   }

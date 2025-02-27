@@ -1,8 +1,8 @@
-// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 
 plugins {
   id("java")
-  id("org.jetbrains.intellij") version "1.9.0"
+  id("org.jetbrains.intellij") version "1.17.4"
 }
 
 group = "org.intellij.sdk"
@@ -26,12 +26,12 @@ dependencies {
 }
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_11
+  sourceCompatibility = JavaVersion.VERSION_17
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
+// See https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-  version.set("2021.3.3")
+  version.set("2024.1.7")
   plugins.set(listOf("com.intellij.java"))
 }
 
@@ -42,15 +42,7 @@ tasks {
 
   patchPluginXml {
     version.set("${project.version}")
-    sinceBuild.set("213")
-    untilBuild.set("222.*")
-  }
-
-  test {
-    // This path value is a machine-specific placeholder text.
-    // Set idea.home.path to the absolute path to the intellij-community source
-    // on your local machine. For real world projects, use variants described in:
-    // https://docs.gradle.org/current/userguide/build_environment.html
-    systemProperty("idea.home.path", "/Users/jhake/Documents/source/comm")
+    sinceBuild.set("241")
+    untilBuild.set("243.*")
   }
 }

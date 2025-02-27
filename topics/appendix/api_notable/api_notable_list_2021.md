@@ -1,6 +1,8 @@
-[//]: # (title: Notable Changes in IntelliJ Platform and Plugins API 2021.*)
+# Notable Changes in IntelliJ Platform and Plugins API 2021.*
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+<!-- Copyright 2000-2024 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+
+<link-summary>List of known Notable API Changes in 2021.*</link-summary>
 
 _Early Access Program_ (EAP) releases of upcoming versions are available [here](https://eap.jetbrains.com).
 
@@ -9,13 +11,13 @@ _Early Access Program_ (EAP) releases of upcoming versions are available [here](
 ### IntelliJ Platform 2021.3
 
 External code formatter tools API
-: Allows integration of standalone tools like `shfmt`: [External Code Formatter](code_formatting.md#external-code-formatter).
+: Allows integration of standalone tools like `shfmt`: [](code_formatting.md#external-code-formatter).
 
 Simplified API for `CustomComponentAction`
-: Use new method `updateCustomComponent(Component, Presentation)` to synchronize given Presentation and component state.
+: Use new method [`CustomComponentAction.updateCustomComponent(Component, Presentation)`](%gh-ic%/platform/editor-ui-api/src/com/intellij/openapi/actionSystem/ex/CustomComponentAction.java) to synchronize given Presentation and component state.
 
 Highlighting API exposes priority range
-: Use `getPriorityRange()` in `AnnotationSession`/`LocalInspectionToolSession` to optimize highlighting for coarse-grained files (e.g., `PsiPlainTextFile` files with single node).
+: Use `getPriorityRange()` in [`AnnotationSession`](%gh-ic%/platform/analysis-api/src/com/intellij/lang/annotation/AnnotationSession.java)/[`LocalInspectionToolSession`](%gh-ic%/platform/analysis-api/src/com/intellij/codeInspection/LocalInspectionToolSession.java) to optimize highlighting for coarse-grained files (e.g., `PsiPlainTextFile` files with single node).
 
 ## 2021.2
 
@@ -28,7 +30,7 @@ Constructor Injection disabled for Extensions
 : Please obtain necessary components only when needed (logged as ERROR now).
 
 Language Injection
-: Use [`LanguageInjectionContributor`](%gh-ic%/platform/core-api/src/com/intellij/lang/injection/general/LanguageInjectionContributor.java) (`com.intellij.languageInjectionContributor` EP) and [`LanguageInjectionPerformer`](%gh-ic%/platform/core-api/src/com/intellij/lang/injection/general/LanguageInjectionPerformer.java) (`com.intellij.languageInjectionPerformer` EP) to customize language injection.
+: Use [`LanguageInjectionContributor`](%gh-ic%/platform/core-api/src/com/intellij/lang/injection/general/LanguageInjectionContributor.java) (`com.intellij.languageInjectionContributor` EP) and [`LanguageInjectionPerformer`](%gh-ic%/platform/core-api/src/com/intellij/lang/injection/general/LanguageInjectionPerformer.java) (`com.intellij.languageInjectionPerformer` EP) to customize [language injection](language_injection.md#languageinjectioncontributor-and-languageinjectionperformer).
 
 ### IntelliJ IDEA 2021.2
 
@@ -45,10 +47,10 @@ _Add unambiguous imports on the fly_ for custom languages
 Ability to override encoding per `VirtualFile`
 : Implement [`FileEncodingProvider`](%gh-ic%/platform/core-api/src/com/intellij/openapi/vfs/encoding/FileEncodingProvider.java) and register in `com.intellij.fileEncodingProvider` extension point.
 
-[JCEF](jcef.md): wrapper for `CefBrowser`
-: [`JBCefOsrHandlerBrowser`](%gh-ic%/platform/platform-api/src/com/intellij/ui/jcef/JBCefOsrHandlerBrowser.java) forwards to custom `CefRenderHandler`, e.g., for off-screen rendering.
+[JCEF](embedded_browser_jcef.md): wrapper for `CefBrowser`
+: [`JBCefOsrHandlerBrowser`](%gh-ic%/platform/ui.jcef/jcef/JBCefOsrHandlerBrowser.java) forwards to custom `CefRenderHandler`, e.g., for off-screen rendering.
 
 ### Java Plugin 2021.1
 
 Testframework: JUnit4 variant for `LightJavaCodeInsightFixtureTestCase`
-: Use `com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase4`.
+: Use [`LightJavaCodeInsightFixtureTestCase4`](%gh-ic%/java/testFramework/src/com/intellij/testFramework/fixtures/LightJavaCodeInsightFixtureTestCase4.kt).

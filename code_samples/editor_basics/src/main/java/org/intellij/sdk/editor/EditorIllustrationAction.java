@@ -1,7 +1,8 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 package org.intellij.sdk.editor;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -14,10 +15,13 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Menu action to replace a selection of characters with a fixed string.
- *
- * @see AnAction
  */
 public class EditorIllustrationAction extends AnAction {
+
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.BGT;
+  }
 
   /**
    * Replaces the run of text selected by the primary caret with a fixed string.
@@ -38,7 +42,7 @@ public class EditorIllustrationAction extends AnAction {
     // Replace the selection with a fixed string.
     // Must do this document change in a write action context.
     WriteCommandAction.runWriteCommandAction(project, () ->
-            document.replaceString(start, end, "editor_basics")
+        document.replaceString(start, end, "Replacement")
     );
     // De-select the text range that was just replaced
     primaryCaret.removeSelection();
@@ -61,7 +65,7 @@ public class EditorIllustrationAction extends AnAction {
     final Editor editor = e.getData(CommonDataKeys.EDITOR);
     // Set visibility and enable only in case of existing project and editor and if a selection exists
     e.getPresentation().setEnabledAndVisible(
-            project != null && editor != null && editor.getSelectionModel().hasSelection()
+        project != null && editor != null && editor.getSelectionModel().hasSelection()
     );
   }
 

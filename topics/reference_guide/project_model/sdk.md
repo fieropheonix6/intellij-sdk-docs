@@ -1,27 +1,39 @@
-[//]: # (title: SDK)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+<link-summary>Configuring and getting information about a project SDK.</link-summary>
+
+# SDK
+
+<tldr>
+
+**Product Help:** [SDKs](https://www.jetbrains.com/help/idea/working-with-sdks.html)
+
+</tldr>
 
 Every project uses a Software Development Kit (SDK).
 For Java projects, the SDK is referred to as the JDK (Java Development Kit).
 The SDK determines which API library is used to build the project.
 If a project is multi-module, the project SDK by default is common for all modules within the project.
 Optionally, individual SDKs for each module can be configured.
-For more information about SDKs, see [SDK](https://www.jetbrains.com/help/idea/working-with-sdks.html) in the IntelliJ IDEA Web Help.
 
-## Getting Project SDK Information
+## Working with SDKs
+
+<include from="project.md" element-id="useWorkspaceModelAPI"/>
+
+### Getting Project SDK Information
+
 The information about the project SDK is accessed via [`ProjectRootManager`](%gh-ic%/platform/projectModel-api/src/com/intellij/openapi/roots/ProjectRootManager.java) like the following example shows
 
 ```java
 Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
 ```
 
-## Getting and Setting Project SDK Attributes
+### Getting and Setting Project SDK Attributes
 
 * To get the project-level SDK:
 
   ```java
-  Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
+  Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdkName();
   ```
 
 * To get the project-level SDK name:
@@ -39,22 +51,23 @@ Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
 * To set the project-level SDK name:
 
   ```java
-  ProjectRootManager.getInstance(project).setProjectSdkName(name);
+  ProjectRootManager.getInstance(project).setProjectSdkName(name, sdk.getSdkType().getName());
   ```
 
-See the [project_model](%gh-sdk-samples%/project_model/src/main/java/org/intellij/sdk/project/model/ProjectSdkAction.java) code sample to get more familiar with SDK manipulation toolset.
+See the [project_model](%gh-sdk-samples-master%/project_model/src/main/java/org/intellij/sdk/project/model/ProjectSdkAction.java) code sample to get more familiar with the SDK manipulation toolset.
 
-## Available SDKs
+### Available SDKs
 
 [`ProjectJdkTable`](%gh-ic%/platform/projectModel-api/src/com/intellij/openapi/projectRoots/ProjectJdkTable.java) can be used to query and modify configured SDKs.
 
-## Working with a Custom SDK
+### Working with a Custom SDK
 
 To create a custom SDK, provide a class extending [`SdkType`](%gh-ic%/platform/lang-core/src/com/intellij/openapi/projectRoots/SdkType.java), leave `saveAdditionalData()` blank, and register it in the `com.intellij.sdkType` extension point.
 
 To make SDK settings persistent, override `setupSdkPaths()` and save settings by `modificator.commitChanges()`:
 
 ```java
+
 @Override
 public boolean setupSdkPaths(@NotNull Sdk sdk, @NotNull SdkModel sdkModel) {
   SdkModificator modificator = sdk.getSdkModificator();
@@ -78,7 +91,7 @@ Use `com.intellij.projectSdkSetupValidator` extension point to register an imple
 The following is a simplified example that checks whether an instance of "DemoSdk" has been configured in the project when the user opens a "DemoFileType":
 
 ```kotlin
-class DemoProjectSdkSetupValidator : ProjectSdkSetupValidator {
+internal class DemoProjectSdkSetupValidator : ProjectSdkSetupValidator {
   override fun isApplicableFor(project: Project, file: VirtualFile): Boolean {
     return file.fileType == DemoFileType
   }
@@ -104,12 +117,11 @@ class DemoProjectSdkSetupValidator : ProjectSdkSetupValidator {
 Within `DemoProjectSdkSetupValidator`:
 
 * `isApplicableFor()` checks what condition(s) should be met to run the validation.
-* `getErrorMessage()` runs the validation and return an appropriate error message if the validation fails.
+* `getErrorMessage()` runs the validation and returns an appropriate error message if the validation fails.
 * If the validation is successful, then it should return null.
-* `getFixHandler()` returns an `EditorNotificationPanel.ActionHandler` that enables the user to execute a quick-fix to resolve the validation issue.
-
+* `getFixHandler()` returns an `EditorNotificationPanel.ActionHandler` that enables the user to execute a quick fix to resolve the validation issue.
 
 > `ProjectSdkSetupValidator` will not work in IntelliJ Platform-based IDEs such as PyCharm.
-> In such cases, you should register an implementation of [`EditorNotifications.Provider`](%gh-ic%/platform/platform-api/src/com/intellij/ui/EditorNotifications.java) at the `com.intellij.editorNotificationProvider` extension point and override the `createNotificationPanel()` method with the conditionality and panel setup you want.
+> In such cases, you should register an implementation of [`EditorNotificationProvider`](%gh-ic%/platform/platform-api/src/com/intellij/ui/EditorNotificationProvider.java) at the `com.intellij.editorNotificationProvider` extension point and override the `createNotificationPanel()` method with the conditionality and panel setup you want.
 >
-{type="warning"}
+{style="warning"}

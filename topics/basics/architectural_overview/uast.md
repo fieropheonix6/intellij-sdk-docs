@@ -1,18 +1,18 @@
-[//]: # (title: UAST - Unified Abstract Syntax Tree)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+# UAST – Unified Abstract Syntax Tree
 
-UAST (Unified Abstract Syntax Tree) is an abstraction layer on the [PSI](psi_elements.md) of different JVM languages.
+<link-summary>Handle different JVM languages syntax trees with a single implementation.</link-summary>
+
+UAST (Unified Abstract Syntax Tree) is an abstraction layer on the [PSI](psi_elements.md) of different programming languages targeting the JVM (Java Virtual Machine).
 It provides a unified API for working with common language elements like classes and method declarations, literal values, and control flow operators.
-
-## Motivation
 
 Different JVM languages have their own [PSI](psi_elements.md), but many IDE features like inspections, gutter markers, reference injection, and many others
 work the same way for all these languages.
-
 Using UAST allows providing features that will work across all [supported JVM languages](#which-languages-are-supported) using a single implementation.
 
 Presentation [Writing IntelliJ Plugins for Kotlin](https://www.youtube.com/watch?v=j2tvi4GbOr4) offers a thorough overview of using UAST in real-world scenarios.
+See also the [AST/UAST](https://googlesamples.github.io/android-custom-lint-rules/api-guide.md.html#astanalysis) section from the _Android Lint API Guide_.
 
 ### When should I use UAST?
 
@@ -33,7 +33,7 @@ Some known examples are:
 ### What about modifying PSI?
 
 UAST is a read-only API.
-There are experimental [`UastCodeGenerationPlugin`](%gh-ic%/uast/uast-common/src/org/jetbrains/uast/generate/UastCodeGenerationPlugin.kt) and [`JvmElementActionsFactory`](%gh-ic%/java/java-analysis-api/src/com/intellij/lang/jvm/actions/JvmElementActionsFactory.kt) classes, but they are currently not recommended for external usage.
+There are experimental [`UastCodeGenerationPlugin`](%gh-ic%/uast/uast-common-ide/src/org/jetbrains/uast/generate/UastCodeGenerationPlugin.kt) and [`JvmElementActionsFactory`](%gh-ic%/java/java-analysis-api/src/com/intellij/lang/jvm/actions/JvmElementActionsFactory.kt) classes, but they are currently not recommended for external usage.
 
 ## Working with UAST
 
@@ -133,7 +133,7 @@ To convert `PsiElement` to the specific `UElement`, use one of the following app
 > * Because of performance: `toUElement()` with type is fail-fast
 > * Because of possibly getting different results in some cases: conversion with type is more predictable
 >
-{type="note"}
+{style="note"}
 
 ### UAST to PSI Conversion
 
@@ -185,6 +185,8 @@ The latter is preferable as it offers better performance and more predictable re
 
 As a general rule, it's recommended to abstain from using `UastVisitor`: if you don't need to process many `UElement`s of different types and if the structure of elements is not very important, then it is better to walk the PSI-tree using `PsiElementVisitor` and [convert](#psi-to-uast-conversion) each `PsiElement` to its corresponding UAST explicitly via `UastContext.toUElement()`.
 
+See also inspection <control>Plugin DevKit | Code | 'UastHintedVisitorAdapter' hints problems</control> (2024.2+).
+
 ## UAST Performance Hints
 
 UAST is not a zero-cost abstraction: [some methods](https://youtrack.jetbrains.com/issue/KT-29856) could be unexpectedly expensive for some languages,
@@ -221,7 +223,7 @@ As it is hard to guess what will be returned, it is also deprecated.
 
 Thus `sourcePsi` and `javaPsi` should be the only ways to obtain `PsiElement` from `UElement`. See the [corresponding section](#uast-to-psi-conversion).
 
-### Should I use `UMethod` or `PsiMethod`, `UClass` or `PsiClass` ?
+### Using UAST or PSI
 
 UAST provides a unified way to represent JVM compatible declarations via `UMethod`, `UField`, `UClass`, and so on.
 But at the same time, all JVM language plugins implement `PsiMethod`, `PsiClass`, and so on to be compatible with Java.
@@ -251,16 +253,22 @@ could be different, not only in the number of elements, but also in their order.
 
 ## Using UAST in Plugins
 
-To register extensions applicable to UAST, specify `language="UAST"` in <path>[plugin.xml](plugin_configuration_file.md)</path>.
+To use UAST in your plugin, add a [dependency](plugin_dependencies.md) on bundled Java plugin (`com.intellij.java`).
+
+### Language Extensions
+
+To register [extensions](plugin_extensions.md) applicable to UAST, specify `language="UAST"` in their registration in <path>[plugin.xml](plugin_configuration_file.md)</path>.
 
 ### Inspecting UAST Tree
 
-To inspect UAST Tree, invoke [internal action](enabling_internal.md) <menupath>Tools | Internal Actions | UAST | Dump UAST Tree (By Each PsiElement)</menupath>.
+To inspect UAST Tree, invoke [internal action](enabling_internal.md) <ui-path>Tools | Internal Actions | UAST | Dump UAST Tree (By Each PsiElement)</ui-path>.
 
 ### Inspections
 
 Use [`AbstractBaseUastLocalInspectionTool`](%gh-ic%/java/java-analysis-api/src/com/intellij/codeInspection/AbstractBaseUastLocalInspectionTool.java) as base class and specify `language="UAST"` in registration.
 If inspection targets only a subset of default types (`UFile`, `UClass`, `UField`, and `UMethod`), specify `UElement`s as hints in overloaded constructor to improve performance.
+
+Use [`ProblemsHolder.registerUProblem()`](%gh-ic%/java/java-analysis-api/src/com/intellij/codeInspection/problemHolderUtil.kt) extension functions for registering problems (2023.2).
 
 ### Line Marker
 

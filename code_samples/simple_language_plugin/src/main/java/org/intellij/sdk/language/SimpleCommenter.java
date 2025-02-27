@@ -1,19 +1,17 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 
 package org.intellij.sdk.language;
 
 import com.intellij.lang.Commenter;
 import org.jetbrains.annotations.Nullable;
 
-public class SimpleCommenter implements Commenter {
+final class SimpleCommenter implements Commenter {
 
-  @Nullable
   @Override
   public String getLineCommentPrefix() {
     return "#";
   }
 
-  @Nullable
   @Override
   public String getBlockCommentPrefix() {
     return "";

@@ -1,14 +1,16 @@
-[//]: # (title: 10. Reference Test)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 10. Reference Test
 
-<microformat>
+<link-summary>Implementing and running tests for resolving elements implemented as a part of the Custom Language Support Tutorial.</link-summary>
+
+<tldr>
 
 **Tested Functionality**: [](reference_contributor.md)
 
-</microformat>
+</tldr>
 
-<include src="tests_prerequisites.md" include-id="custom_language_testing_tutorial_header"></include>
+<include from="tests_prerequisites.md" element-id="custom_language_testing_tutorial_header"></include>
 
 ## Define Test Data
 This test reuses the Simple Language file <path>DefaultTestData.simple</path>.
@@ -29,6 +31,6 @@ The fixture gets the `PsiReference` at the caret position, and then asserts the 
 ```
 {src="simple_language_plugin/src/test/java/org/intellij/sdk/language/SimpleCodeInsightTest.java" include-symbol="testReference"}
 
-
 ## Run the Test
-[Run](parsing_test.md#run-the-test) the test and make sure it's green.
+
+<include from="custom_language_testing_snippets.md" element-id="runTests"/>

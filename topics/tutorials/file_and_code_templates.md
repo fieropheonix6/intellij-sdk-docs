@@ -1,8 +1,14 @@
-[//]: # (title: File and Code Templates)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# File and Code Templates
 
-<excerpt>File templates allow generating files and code fragments containing repetitive text and patterns.</excerpt>
+<link-summary>File templates allow generating files and code fragments containing repetitive text and patterns.</link-summary>
+
+<tldr>
+
+**Product Help:** [File and Code Templates](https://www.jetbrains.com/help/idea/settings-file-and-code-templates.html), [File templates](https://www.jetbrains.com/help/idea/using-file-and-code-templates.html), [Templates with multiple files](https://www.jetbrains.com/help/idea/templates-with-multiple-files.html)
+
+</tldr>
 
 The _File templates_ mechanism allows generating files and code fragments containing repetitive text and patterns.
 Its main purpose is to relieve users from unnecessary manual work by generating boilerplate code automatically.
@@ -19,10 +25,6 @@ A template can contain dynamic parts based on the context, e.g., project or pack
 It is also possible to create custom properties and populate them with the required values.
 
 The contents of all listed file templates can be edited in the IDE settings so that users can adjust them to their specific needs.
-
-> See [File and Code Templates](https://www.jetbrains.com/help/idea/settings-file-and-code-templates.html), [File templates](https://www.jetbrains.com/help/idea/using-file-and-code-templates.html), and related sections in the IntelliJ IDEA Web Help for more information.
->
-{type="note"}
 
 These sections describe how to add File and Code Templates, and their associated building blocks, to plugins:
 * [](providing_file_templates.md)

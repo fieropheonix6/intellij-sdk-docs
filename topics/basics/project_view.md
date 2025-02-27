@@ -1,8 +1,14 @@
-[//]: # (title: Project View)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Project View
 
-Please refer to the [Project tool window](https://www.jetbrains.com/help/idea/project-tool-window.html) section in IntelliJ IDEA Web Help.
+<link-summary>Changing the project view nodes representation.</link-summary>
+
+<tldr>
+
+**Product Help:** [Project tool window](https://www.jetbrains.com/help/idea/project-tool-window.html)
+
+</tldr>
 
 * [](tree_structure_view.md)
 
@@ -17,4 +23,4 @@ To modify project view node representations, implement
 and register it as `com.intellij.projectViewNodeDecorator` extension.
 From the interface only the `decorate()` method that modifies `ProjectViewNode`s needs to be implemented.
 If you need to update your node representation on certain events, please use
-[`ProjectView.update()`](%gh-ic%/platform/lang-impl/src/com/intellij/ide/projectView/ProjectView.java).
+[`ProjectView.refresh()`](%gh-ic%/platform/lang-impl/src/com/intellij/ide/projectView/ProjectView.java).

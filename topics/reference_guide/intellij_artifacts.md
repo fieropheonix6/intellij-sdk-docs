@@ -1,10 +1,12 @@
-[//]: # (title: IntelliJ Platform Artifacts Repositories)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# IntelliJ Platform Artifacts Repositories
+
+<link-summary>Overview of the repositories hosting artifacts related to the IntelliJ Platform.</link-summary>
 
 > When using additional repositories, make sure to use HTTPS always.
 >
-{type="warning"}
+{style="warning"}
 
 JetBrains maintains public repositories that host artifacts related to the IntelliJ Platform, such as binaries and source code.
 These repositories make artifacts more accessible for plugin developers.
@@ -18,7 +20,9 @@ See the [Maven coordinates](#specify-the-maven-coordinates-for-the-artifact) sec
 Both the Releases and Snapshots repositories have two types of content:
 * Binary and source code artifacts for cross-platform, ZIP distributions of IntelliJ Platform-based IDEs, such as IntelliJ IDEA, CLion, Rider, and MPS.
   These artifacts are _not intended_ to be accessed directly from a plugin project's Gradle build script.
-  The [](tools_gradle_intellij_plugin.md) will access them as-needed for a plugin project.
+  See also [](tools_intellij_platform_gradle_plugin_repositories_extension.md).
+
+  The [](tools_gradle_intellij_plugin.md) will access them implicitly as-needed for a plugin project.
 * Artifacts for individual modules from the IntelliJ Platform.
 These may be downloaded, or accessed directly from a Gradle build script, as explained below.
 
@@ -29,7 +33,7 @@ A link to this repository should be added to Maven POM or Gradle build script wh
 
 > Usages of deprecated URL `https://jetbrains.bintray.com/intellij-third-party-dependencies` must be replaced with `https://cache-redirector.jetbrains.com/intellij-dependencies` in build scripts.
 >
-{type="warning"}
+{style="warning"}
 
 ## Using IntelliJ Platform Module Artifacts
 
@@ -43,9 +47,15 @@ To set up dependencies on a module, there are two types of information needed:
 ### Specify the Repository URL
 
 The URL for the desired artifact needs to be added to a Maven or Gradle script:
-* For release versions, use:<br/>`https://www.jetbrains.com/intellij-repository/releases`
-* For EAP snapshots, use:<br/>`https://www.jetbrains.com/intellij-repository/snapshots`
-* For dependencies on individual modules from the IntelliJ Platform, also use:<br/>`https://cache-redirector.jetbrains.com/intellij-dependencies`
+* For release versions, use:
+
+  `https://www.jetbrains.com/intellij-repository/releases`
+* For EAP snapshots, use:
+
+  `https://www.jetbrains.com/intellij-repository/snapshots`
+* For dependencies on individual modules from the IntelliJ Platform, also use:
+
+  `https://cache-redirector.jetbrains.com/intellij-dependencies`
 
 ### Specify the Maven Coordinates for the Artifact
 
@@ -73,7 +83,7 @@ The table below shows some example module names and their corresponding groupId 
 | intellij.xml.impl               | com.jetbrains.intellij.xml      | xml-impl                |
 
 The artifact _version_ can be specified in one of several ways because each artifact [at the Repository URLs](#specify-the-repository-url) has multiple versions available:
-* Specify release build versions as _MAJOR[.MINOR][.FIX]_. For example `14`, or `14.1`, or `14.1.1`
+* Specify release build versions as _MAJOR\[.MINOR]\[.FIX]_. For example `14`, or `14.1`, or `14.1.1`
 * Snapshot versions are specified as:
   * The snapshot of the most recent branch build is specified as _BRANCH-EAP-SNAPSHOT_. For example, `193-EAP-SNAPSHOT`.
     There is only one of this type of build for each branch of each product.

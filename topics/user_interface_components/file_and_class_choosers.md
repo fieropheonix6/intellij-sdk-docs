@@ -1,6 +1,8 @@
-[//]: # (title: File and Class Choosers)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# File and Class Choosers
+
+<link-summary>Overview of APIs allowing to create file and class choosers.</link-summary>
 
 ## File Choosers
 
@@ -17,7 +19,7 @@ For more fine-grained control over the allowed selection, you can overload the `
 You can also customize the presentation of files by overriding `getIcon()`, `getName()` and `getComment()` methods.
 Note that the native macOS file chooser does not support most of the customizations, so if you rely on them, you need to use an overload of `chooseFiles()` which displays the standard IntelliJ Platform dialog.
 
-### Via Textfield
+### Via Text Field
 
 A very common way of using file choosers is to use a text field for entering the path with an ellipsis button (<control>...</control>) for showing the file chooser.
 To create such a control, use the [`TextFieldWithBrowseButton`](%gh-ic%/platform/platform-api/src/com/intellij/openapi/ui/TextFieldWithBrowseButton.java) component and call the `addBrowseFolderListener()` method on it to set up the file chooser.
@@ -31,7 +33,7 @@ An alternative UI for selecting files, which works best when the most common way
 The dialog shown by this API has two tabs:
 
 *  One shows the project structure
-*  Another shows a list of files similar to the one used by the <menupath>Navigate | File</menupath> popup.
+*  Another shows a list of files similar to the one used by the <ui-path>Navigate | File</ui-path> popup.
 
 To show the dialog, call `showDialog()` on the chooser returned from `createFileChooser()`, and then call `getSelectedFile()` to retrieve the user's selection.
 
@@ -42,7 +44,7 @@ Its different methods allow you to specify the scope from which the classes are 
 
 For choosing a Java package, you can use the [`PackageChooserDialog`](%gh-ic%/java/java-impl/src/com/intellij/ide/util/PackageChooserDialog.java) class.
 
-> To use Java-specific components in plugins targeting versions 2019.2+, explicit dependency on the Java plugin is required.
-> See the [Modules Specific to Functionality](plugin_compatibility.md#modules-specific-to-functionality) page for details.
+> To use Java-specific components, an explicit dependency on the Java plugin is required.
+> See [](plugin_compatibility.md#java) for details.
 >
-{type="note"}
+{style="note"}

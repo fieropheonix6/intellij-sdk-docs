@@ -1,14 +1,14 @@
-[//]: # (title: 2. Parsing Test)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 2. Parsing Test
 
-<microformat>
+<tldr>
 
 **Tested Functionality**: [](lexer_and_parser_definition.md)
 
-</microformat>
+</tldr>
 
-<include src="tests_prerequisites.md" include-id="custom_language_testing_tutorial_header"></include>
+<include from="tests_prerequisites.md" element-id="custom_language_testing_tutorial_header"></include>
 
 For more complex Lexers (e.g., having additional logic), it is advisable to add separate tests inheriting from [`LexerTestCase`](%gh-ic%/platform/testFramework/src/com/intellij/testFramework/LexerTestCase.java).
 
@@ -35,13 +35,14 @@ private recover_property ::= !(KEY|SEPARATOR|COMMENT)
 Create the <path>ParsingTestData.simple</path> properties file in the <path>testData</path> folder.
 Note the last few lines define a purposely incorrect key.
 
-```bash
+```properties
 ```
 {src="simple_language_plugin/src/test/testData/ParsingTestData.simple"}
 
 ## Copy the Expected PSI Tree
-The easiest way to get the expected PSI structure for any file is to use the PSI Viewer.
-Run the project and use <menupath>Tools | View PSI Structure</menupath>.
+The easiest way to get the expected PSI structure for any file is to use the [built-in PSI viewer](explore_api.md#internalMode).
+Run the project and use <ui-path>Tools | View PSI Structure...</ui-path>
+(enable [Internal Mode](enabling_internal.md) explicitly for the IDE instance if the menu is not available).
 
 ![PSI Tree Copy](plugin_copy_psi.png)
 
@@ -50,7 +51,7 @@ Use the <control>Copy PSI</control> button to copy the expected PSI structure to
 ## Define the Output Reference Test Data
 Create a file <path>ParsingTestData.txt</path> with the copied PSI tree.
 
-```text
+```properties
 ```
 {src="simple_language_plugin/src/test/testData/ParsingTestData.txt"}
 
@@ -64,16 +65,4 @@ Override `getTestDataPath()`, and return the path from the root of this plugin m
 
 ## Run the Test
 
-Run tests by:
-* Opening the <control>Gradle</control> Tool Window.
-* Select the <control>simple_language_plugin</control> node.
-  You may need to reimport it as a Gradle project.
-* Drill down under <control>simple_language_plugin</control> to <control>Tasks</control>, <control>verification</control>, <control>test</control> task.
-* Run the <control>test</control> task.
-
-The results are displayed in the <control>Run</control> Tool Window, and also written to the <path>simple_language_plugin/build/test-results/test</path> directory.
-
-If the <control>Run</control> Tool Window displays the error *Test events were not received*, do the following:
-* In the <control>Gradle</control> Tool Window, drill down under <control>simple_language_plugin</control> to <control>Tasks</control>, <control>build</control>, <control>clean</control> task.
-* Run the <control>clean</control> task, which deletes the <path>simple_language_plugin/build</path> directory.
-* Restart the test.
+<include from="custom_language_testing_snippets.md" element-id="runTests"/>

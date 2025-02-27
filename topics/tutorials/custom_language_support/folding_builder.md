@@ -1,16 +1,18 @@
-[//]: # (title: 12. Folding Builder)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 12. Folding Builder
 
-<microformat>
+<link-summary>Sample implementation folding builder allowing to see the values of Simple language properties referenced in Java files.</link-summary>
 
-**Code**: [`SimpleFoldingBuilder`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleFoldingBuilder.java)
+<tldr>
+
+**Code**: [`SimpleFoldingBuilder`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleFoldingBuilder.java)
 
 **Testing**: [](folding_test.md)
 
-</microformat>
+</tldr>
 
-<include src="language_and_filetype.md" include-id="custom_language_tutorial_header"></include>
+<include from="language_and_filetype.md" element-id="custom_language_tutorial_header"></include>
 
 A folding builder identifies the folding regions in the code.
 In this step of the tutorial, the folding builder is used to identify folding regions and replace the regions with specific text.
@@ -18,14 +20,15 @@ Rather than the usual practice of using a folding builder to collapse a class, m
 
 ## Define a Folding Builder
 
-The [`SimpleFoldingBuilder`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleFoldingBuilder.java) replaces usages of properties with their values by default.
+The [`SimpleFoldingBuilder`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleFoldingBuilder.java) replaces usages of properties with their values by default.
 Start by subclassing [`FoldingBuilderEx`](%gh-ic%/platform/core-api/src/com/intellij/lang/folding/FoldingBuilderEx.java)
 
-Note that `SimpleFoldingBuilder` also implements [`DumbAware`](%gh-ic%/platform/core-api/src/com/intellij/openapi/project/DumbAware.java), which means the class is allowed to run in dumb mode, when indices are in background update.
+Note that `SimpleFoldingBuilder` is marked [dumb aware](indexing_and_psi_stubs.md#DumbAwareAPI),
+which means the class is allowed to run in [dumb mode](indexing_and_psi_stubs.md#dumb-mode), when indexes are in background update.
 
 > A folding builder must implement [`DumbAware`](%gh-ic%/platform/core-api/src/com/intellij/openapi/project/DumbAware.java) to function in this tutorial and pass tests.
 >
-{type="note"}
+{style="note"}
 
 The `buildFoldRegions()` method searches down a PSI tree from `root` to find all literal expressions containing the [simple prefix](annotator.md#define-an-annotator) `simple:`.
 The remainder of such a string is expected to contain a Simple Language key, and so the text range is stored as a [`FoldingDescriptor`](%gh-ic%/platform/core-api/src/com/intellij/lang/folding/FoldingDescriptor.java).
@@ -35,7 +38,7 @@ The IntelliJ Platform uses the value to substitute for the key when the code get
 
 ```java
 ```
-{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleFoldingBuilder.java"}
+{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleFoldingBuilder.java" include-symbol="SimpleFoldingBuilder"}
 
 ## Register the Folding Builder
 
@@ -51,10 +54,10 @@ The `SimpleFoldingBuilder` implementation is registered with the IntelliJ Platfo
 
 ## Run the Project
 
-Run the plugin by using the Gradle [`runIde`](gradle_prerequisites.md#running-a-simple-gradle-based-intellij-platform-plugin) task.
+Run the plugin by using the Gradle [`runIde`](creating_plugin_project.md#running-a-plugin-with-the-runide-gradle-task) task.
 
 Now when a Java file is opened in the editor, it shows the property's value instead of the key.
 This is because `SimpleFoldingBuilder.isCollapsedByDefault()` always returns `true`.
-Try using <menupath>Code | Folding | Expand All</menupath> to show the key rather than the value.
+Try using <ui-path>Code | Folding | Expand All</ui-path> to show the key rather than the value.
 
 ![Folding](folding.png)

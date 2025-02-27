@@ -1,13 +1,15 @@
-[//]: # (title: Key Topics)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Key Topics
+
+<link-summary>Overview of IntelliJ Platform key concepts and extension points.</link-summary>
 
 The IntelliJ Platform is extensive and very capable, and its size and scope can initially be very daunting.
 This page is intended to list the key topics that a plugin author would be interested in, and provide quick links to the most common extension points.
 
 ## Essential Concepts
 
-- [](getting_started.md).
+- [](developing_plugins.md).
 - [](testing_plugins.md).
 - Component model - the IntelliJ Platform is a component-based application and is responsible for creating components and injecting dependencies.
   Understanding this is necessary for building plugins.
@@ -17,7 +19,6 @@ This page is intended to list the key topics that a plugin author would be inter
 
 > See also [](glossary.md) for a handy reference of common terms.
 >
-{type="tip"}
 
 ## Code Model
 

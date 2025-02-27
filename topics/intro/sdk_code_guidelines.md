@@ -1,6 +1,8 @@
-[//]: # (title: SDK Code Sample Guidelines)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# SDK Code Sample Guidelines
+
+<link-summary>Coding guidelines for the code contributed to the IntelliJ SDK Code Samples.</link-summary>
 
 This document describes the coding guidelines used for authoring open-source IntelliJ Platform SDK code samples.
 Before you begin, please read this page thoroughly, as well as the [Code of Conduct](intellij-sdk-docs-original_CODE_OF_CONDUCT.md) and [License](https://github.com/JetBrains/intellij-sdk-docs/blob/main/LICENSE.txt) documents.
@@ -19,7 +21,7 @@ Keep the following considerations in mind while authoring an SDK code sample:
       Use error checking where it is necessary to make a point about an implementation pitfall.
     * Keep implementations as simple as possible, but use the full features of the IntelliJ Platform, programming language, and libraries.
     * Use meaningful names for interfaces, classes, fields, methods, and extension points.
-    * Write instructional JavaDoc comments.
+    * Write instructional Javadoc comments.
   * Code samples replace lots of documentation.
 * Aim for two levels of SDK samples:
   * A _basic_ sample is focused on a particular subject by demonstrating a limited area of the IntelliJ Platform.
@@ -38,13 +40,13 @@ Each roadmap should contain:
 Use the standard intellij-community copyright notice in all sample plugins authored by JetBrains:
 
 ```text
-Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 ```
 
 > The copyright statement must appear at the top of every source file.
 > Use the [IntelliJ Platform SDK](https://github.com/JetBrains/intellij-sdk-docs/tree/main/.idea/copyright) copyright profile.
 >
-{type="note"}
+{style="note"}
 
 ## Directory Naming Conventions for SDK Plugins
 
@@ -128,23 +130,23 @@ code_samples/
 
 ## Gradle Build Script Conventions
 
-SDK code samples must be developed [using Gradle](gradle_build_system.md).
+SDK code samples must be developed [using Gradle](creating_plugin_project.md).
 As of this writing, the use of Gradle in SDK code samples still relies heavily on the <path>plugin.xml</path> for specifying the plugin configuration.
 At a later, second phase, the SDK code samples will transition to rely more on the Gradle configuration.
 
-The default contents of a Gradle build script file are produced by the [New Project Wizard](gradle_prerequisites.md#creating-a-gradle-based-intellij-platform-plugin-with-new-project-wizard).
+The default contents of a Gradle build script file are produced by the [New Project Wizard](creating_plugin_project.md#create-ide-plugin).
 A consistent structure for an SDK code sample's Gradle build script file is essential for clarity and is based on the default produced by the project wizard.
 Comments in SDK code sample Gradle build scripts should only draw attention to the parts of the Gradle configuration that are unique for a plugin.
 
 For SDK code samples, a few alterations are needed to the default <path>build.gradle.kts</path> file produced by the plugin wizard:
 * Maintain the Gradle properties `version` (`project.version`) and `group` (`project.group`).
-  See the [Plugin Gradle Properties](gradle_prerequisites.md#plugin-gradle-properties-and-plugin-configuration-file-elements) section for how these Gradle properties relate to the elements in <path>plugin.xml</path>.
+  See the [Plugin Gradle Properties](creating_plugin_project.md#plugin-gradle-properties-and-plugin-configuration-file-elements) section for how these Gradle properties relate to the elements in <path>plugin.xml</path>.
 * Add the following statement to the [Patching DSL](tools_gradle_intellij_plugin.md#tasks-patchpluginxml) (`patchPluginXml {...}`) section:
   ```kotlin
   // Patches <version> value in plugin.xml
   version.set(project.version)
-  sinceBuild.set("213")
-  untilBuild.set("222.*")
+  sinceBuild.set("221")
+  untilBuild.set("223.*")
   ```
 
 ## plugin.xml Conventions
@@ -175,7 +177,7 @@ The sequence of elements in an SDK code sample <path>plugin.xml</path> file is:
 ## README File
 
 Each code sample provided within the IntelliJ Platform SDK should contain a README file describing the sample purpose and its content.
-The [`SAMPLE_README.md`](%gh-sdk-samples%/SAMPLE_README.md) file contains a template that should be used as an initial draft for further writing.
+The [`SAMPLE_README.md`](%gh-sdk-samples-master%/SAMPLE_README.md) file contains a template that should be used as an initial draft for further writing.
 
 Each <path>README.md</path> file is supposed to have the same structure for better navigation and readability:
 - A header with the link to the main IntelliJ SDK documentation and a page that the sample refers to.
@@ -194,7 +196,7 @@ Code samples should build cleanly, with no warnings or errors, and new code samp
 Testers should complete the following checklist.
 Here the term "IDE" means the IntelliJ Platform-based IDE in which the plugin is designed to run:
 * The plugin should load in the IDE.
-* The correct information about the plugin should display in the <menupath>Settings/Preferences | Plugins</menupath> panel.
+* The correct information about the plugin should display in the <ui-path>Settings | Plugins</ui-path> panel.
 * If applicable, the plugin UI, such as tool windows, menu additions, etc. should display correctly.
 * The functionality of the plugin should be tested with a sample file.
 * If applicable, the plugin should pass unit tests.

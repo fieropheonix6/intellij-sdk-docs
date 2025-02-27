@@ -1,4 +1,4 @@
-// Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2023 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
 package org.intellij.sdk.facet;
 
@@ -18,6 +18,7 @@ import java.awt.*;
  * Manages validation and modification of the {@link DemoFacet} state.
  */
 public class DemoFacetEditorTab extends FacetEditorTab {
+
   private static final String FACET_PANEL_PROMPT = "Path To SDK: ";
 
   private final DemoFacetState mySettings;
@@ -37,7 +38,7 @@ public class DemoFacetEditorTab extends FacetEditorTab {
   }
 
   /**
-   * Provides the {@link JPanel} displayed in the Preferences | Facet UI
+   * Provides the {@link JPanel} displayed in the Project Structure | Facet UI
    *
    * @return {@link JPanel} to be displayed in the {@link DemoFacetEditorTab}.
    */
@@ -84,7 +85,7 @@ public class DemoFacetEditorTab extends FacetEditorTab {
     try {
       String newTextContent = myPath.getText();
       mySettings.setDemoFacetState(newTextContent);
-    } catch(Exception e) {
+    } catch (Exception e) {
       throw new ConfigurationException(e.toString());
     }
   }

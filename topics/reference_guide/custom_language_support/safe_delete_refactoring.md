@@ -1,8 +1,16 @@
-[//]: # (title: Safe Delete Refactoring)
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Safe Delete Refactoring
 
-The _Safe Delete_ refactoring also builds on the same [Find Usages](find_usages.md) framework as [Rename Refactoring](rename_refactoring.md).
+<link-summary>Implementing the Safe Delete feature allowing to adjust the code that uses a deleted element.</link-summary>
+
+<tldr>
+
+**Product Help:** [Safe delete](https://www.jetbrains.com/help/idea/safe-delete.html)
+
+</tldr>
+
+The _Safe Delete_ refactoring also builds on the same [](find_usages.md) framework as [](rename_refactoring.md).
 
 In addition to that, to support _Safe Delete_, a plugin needs to implement two things:
 
@@ -22,5 +30,5 @@ In addition to that, to support _Safe Delete_, a plugin needs to implement two t
 
 If needed, it's possible to further customize how _Safe Delete_ is performed for a particular type of element (e.g., how references are searched) via [`SafeDeleteProcessorDelegate`](%gh-ic%/platform/lang-impl/src/com/intellij/refactoring/safeDelete/SafeDeleteProcessorDelegate.java).
 
-**Example**:
+**Example:**
 [`SafeDeleteProcessorDelegate`](%gh-ic%/plugins/properties/src/com/intellij/lang/properties/refactoring/PropertiesFilesSafeDeleteProcessor.java) implementation for [Properties language plugin](%gh-ic%/plugins/properties)

@@ -1,6 +1,8 @@
-[//]: # (title: Basics of Working with the Editor)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Basics of Working with the Editor
+
+<link-summary>Overview of tutorial on working with editor.</link-summary>
 
 This tutorial will lead you through a series of steps showing how to work with the IntelliJ Platform Editor, how to access and modify text it contains, and how to handle events sent to the editor.
 * [](working_with_text.md)
@@ -11,7 +13,7 @@ This tutorial will lead you through a series of steps showing how to work with t
 > For operations that require access to the PSI, please see [](psi.md).
 
 The following are referenced in the tutorial:
-* The [editor_basics](%gh-sdk-samples%/editor_basics/) plugin code sample,
+* The [editor_basics](%gh-sdk-samples-master%/editor_basics/) plugin code sample,
 * [editor-ui-api package](%gh-ic%/platform/editor-ui-api),
 * Those not found in `editor-ui-api` package:
   * [`EditorActionManager`](%gh-ic%/platform/platform-api/src/com/intellij/openapi/editor/actionSystem/EditorActionManager.java),
@@ -21,4 +23,4 @@ The following are referenced in the tutorial:
 
 **Related topics:**
 * [](basic_action_system.md)
-* [](general_threading_rules.md)
+* [](threading_model.md)

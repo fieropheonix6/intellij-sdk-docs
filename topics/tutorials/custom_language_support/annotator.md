@@ -1,17 +1,19 @@
-[//]: # (title: 7. Annotator)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 7. Annotator
 
-<microformat>
+<link-summary>Sample implementation of annotator highlighting resolved and unresolved Simple language properties in Java strings.</link-summary>
+
+<tldr>
 
 **Reference**: [](syntax_highlighting_and_error_highlighting.md#annotator)
 
-**Code**: [`SimpleAnnotator`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleAnnotator.java)
+**Code**: [`SimpleAnnotator`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleAnnotator.java)
 
 **Testing**: [](annotator_test.md)
-</microformat>
+</tldr>
 
-<include src="language_and_filetype.md" include-id="custom_language_tutorial_header"></include>
+<include from="language_and_filetype.md" element-id="custom_language_tutorial_header"></include>
 
 An `Annotator` helps highlight and annotate any code based on specific rules.
 This section adds annotation functionality to support the Simple Language in the context of Java code.
@@ -21,7 +23,7 @@ This section adds annotation functionality to support the Simple Language in the
 Classes defined in this step of the tutorial depend on `com.intellij.psi.PsiLiteralExpression` (the PSI representation for String literals in Java code) at runtime.
 Using `PsiLiteralExpression` [introduces a dependency](plugin_compatibility.md#modules-specific-to-functionality) on `com.intellij.java`.
 
-Beginning in version 2019.2, a dependency on Java plugin [must be declared explicitly](https://blog.jetbrains.com/platform/2019/06/java-functionality-extracted-as-a-plugin/).
+Beginning in version 2019.2, a dependency on Java plugin [must be declared explicitly](plugin_compatibility.md#java).
 First, add a dependency on the Java plugin in the Gradle build script:
 
 <tabs>
@@ -53,22 +55,21 @@ Then, declare the dependency in <path>[plugin.xml](plugin_configuration_file.md)
 
 ## Define an Annotator
 
-The [`SimpleAnnotator`](%gh-sdk-samples%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleAnnotator.java) subclasses [`Annotator`](%gh-ic%/platform/analysis-api/src/com/intellij/lang/annotation/Annotator.java).
+The [`SimpleAnnotator`](%gh-sdk-samples-master%/simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleAnnotator.java) subclasses [`Annotator`](%gh-ic%/platform/analysis-api/src/com/intellij/lang/annotation/Annotator.java).
 Consider a literal string that starts with "simple:" as a prefix of a Simple Language key.
 It isn't part of the Simple Language, but it is a useful convention for detecting Simple Language keys embedded as string literals in other languages, like Java.
 Annotate the `simple:key` literal expression, and differentiate between a well-formed vs. an unresolved property.
 
 > The use of new `AnnotationHolder` syntax starting 2020.2, which uses the builder format.
 >
-{type="note"}
+{style="note"}
 
 ```java
 ```
-{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleAnnotator.java"}
+{src="simple_language_plugin/src/main/java/org/intellij/sdk/language/SimpleAnnotator.java" include-symbol="SimpleAnnotator"}
 
-> If the above code is copied at this stage of the tutorial, then remove the line below the comment "** Tutorial step 18.3 …" The quick fix class in that line is not defined until later in the tutorial.
+> If the above code is copied at this stage of the tutorial, then remove the line below the comment "** Tutorial step 19. …" The quick fix class in that line is not defined until later in the tutorial.
 >
-{type="tip"}
 
 ## Register the Annotator
 
@@ -84,7 +85,7 @@ Using the `com.intellij.annotator` extension point in the plugin configuration f
 
 ## Run the Project
 
-Run the plugin by using the Gradle [`runIde`](gradle_prerequisites.md#running-a-simple-gradle-based-intellij-platform-plugin) task.
+Run the plugin by using the Gradle [`runIde`](creating_plugin_project.md#running-a-plugin-with-the-runide-gradle-task) task.
 
 As a test, define the following Java file containing a Simple Language `prefix:value` pair:
 

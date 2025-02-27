@@ -1,17 +1,19 @@
-[//]: # (title: Incompatible Changes in IntelliJ Platform and Plugins API)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Incompatible Changes in IntelliJ Platform and Plugins API
 
 <!--
 =============== DO NOT RENAME OR MOVE THIS FILE ===============
 
-Before documenting a breaking API change, please, make sure that the change cannot be avoided in an alternative way.
+Before documenting a breaking API change, please make sure that the change cannot be avoided in an alternative way.
 
-APIs marked with @ApiStatus.Experimental, @ApiStatus.Internal, or @ApiStatus.ScheduledForRemoval don't need to be documented.
+APIs marked with @Deprecated(forRemoval=true), @ApiStatus.Experimental, @ApiStatus.Internal/IntellijInternalApi, or @ApiStatus.ScheduledForRemoval don't need to be documented.
 
-To document a new incompatible change, add a new line with the problem pattern followed by a 2nd line with ": "-prefixed human-readable description and recommended fix/action.
+To document a new incompatible change, add a new line with the problem pattern followed by a 2nd line with ": "-prefixed human-readable description
+and recommended fix/action (REQUIRED, please write full sentence ending with '.', see existing entries as reference).
+Non-platform changes must be grouped under relevant section for plugin.
 
-The following problem patterns are supported:
+The following problem patterns are supported and must be followed EXACTLY (e.g., no '#' instead of '.'):
 
 <package name> package removed
 
@@ -54,34 +56,33 @@ Where the placeholders must be enclosed in code quotes (`name`):
 <property name> is a full name of a property from .properties file, like `some.action.description`
 <bundle name> is a fully qualified name of the property bundle, which includes its package, like `message.IdeBundle`
 
-NOTE: If a code change you're trying to document doesn't match any of the above patterns, fill in a ticket in the YouTrack.
-An example of a ticket is https://youtrack.jetbrains.com/issue/MP-1218. Until supported, you may document the change as you prefer, and I will correct it later.
+NOTE: If a code change you're trying to document doesn't match any of the above patterns, please ask in #plugins-verifier
 
 NOTE: You are allowed to prettify the pattern using links: [`org.example.Foo`](https://github.com/JetBrains/intellij-community/tree/master/)
 
-NOTE: Entries not starting with code quotes (`name`) can be added to document non-code changes  and will be skipped in API verification.
+NOTE: Entries not starting with code quotes (`name`) can be added to document non-code changes and will be skipped in API verification.
 -->
 
-<excerpt>List of known Breaking API Changes by version</excerpt>
+<link-summary>List of known Breaking API Changes by version</link-summary>
 
 IntelliJ API may be occasionally changed between releases, leading to existing plugins' incompatibilities with newer IDE builds.
 
-Please see [](verifying_plugin_compatibility.md) on how to use Plugin Verifier and IDE inspections to check such problems.
+See [](verifying_plugin_compatibility.md) on how to use Plugin Verifier and IDE inspections to check such problems.
 
 ## Known Breaking Changes
 
-> [Subscribe to Marketplace Developer News](https://jb.gg/mp-updates) to receive news and announcements.
-> Also follow [JBPlatform](https://twitter.com/JBPlatform/) on Twitter and visit [JetBrains Platform Blog](https://blog.jetbrains.com/platform/).
->
-{type="tip"}
+<include from="snippets.md" element-id="subscribeNews"/>
 
 The following pages list the breaking changes in IDE and plugin releases with required/recommended steps to take by plugin authors.
 
+* [Changes in 2025.*](api_changes_list_2025.md)
+* [Changes in 2024.*](api_changes_list_2024.md)
+* [Changes in 2023.*](api_changes_list_2023.md)
 * [Changes in 2022.*](api_changes_list_2022.md)
 * [Changes in 2021.*](api_changes_list_2021.md)
 * [Changes in 2020.*](api_changes_list_2020.md)
 * [Changes in 2019.*](api_changes_list_2019.md)
 
-## Library Updates
+## Bundled Library Updates
 
 Information about bundled Third-Party Software/Libraries and their respective versions is available [here](https://www.jetbrains.com/legal/third-party-software/).

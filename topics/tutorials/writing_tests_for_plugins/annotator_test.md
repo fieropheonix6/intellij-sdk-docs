@@ -1,14 +1,16 @@
-[//]: # (title: 4. Annotator Test)
+<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# 4. Annotator Test
 
-<microformat>
+<link-summary>Implementing and running tests for the annotator implemented as a part of the Custom Language Support Tutorial.</link-summary>
+
+<tldr>
 
 **Tested Functionality**: [](annotator.md)
 
-</microformat>
+</tldr>
 
-<include src="tests_prerequisites.md" include-id="custom_language_testing_tutorial_header"></include>
+<include from="tests_prerequisites.md" element-id="custom_language_testing_tutorial_header"></include>
 
 ## Define Input Test Data
 The <path>DefaultTestData.simple</path> file is reused for this test.
@@ -27,6 +29,8 @@ public class Test {
 }
 ```
 
+> See how to [generate highlighting test data](testing_highlighting.md#generating-test-data).
+
 ## Define a Test Method
 Add the `testAnnotator()` method to the `SimpleCodeInsightTest` class [previously defined](completion_test.md#define-a-test).
 Again, this method configures the test fixture by using the test files.
@@ -37,4 +41,5 @@ It then calls the `checkHighlighting()` method to verify weak warnings.
 {src="simple_language_plugin/src/test/java/org/intellij/sdk/language/SimpleCodeInsightTest.java" include-symbol="testAnnotator"}
 
 ## Run the Test
-[Run](parsing_test.md#run-the-test) the test and make sure it's green.
+
+<include from="custom_language_testing_snippets.md" element-id="runTests"/>

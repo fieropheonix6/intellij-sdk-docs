@@ -1,6 +1,8 @@
-[//]: # (title: File-Based Indexes)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# File-Based Indexes
+
+<link-summary>Introduction to file-based indexes allowing to store information about presence of some values in files, and accessing it by keys in a performant way.</link-summary>
 
 File-based indexes are based on a [Map/Reduce architecture](https://en.wikipedia.org/wiki/MapReduce).
 Each index has a specific type of key and a particular type of value.
@@ -21,13 +23,11 @@ When accessing an index, specify the key you're interested in and get back the l
 
 > In some cases, using [Gists](indexing_and_psi_stubs.md#gists) can be considered as an alternative.
 >
-{type="tip"}
 
 ## Implementing a File-Based Index
 
 > A relatively simple file-based index implementation is the [UI Designer bound forms index](%gh-ic%/plugins/ui-designer/src/com/intellij/uiDesigner/binding/FormClassIndex.java), storing FQN of bound implementation class for [GUI Designer](https://www.jetbrains.com/help/idea/gui-designer-basics.html) <path>.form</path> files.
 >
-{type="tip"}
 
 Each specific index implementation is a class extending [`FileBasedIndexExtension`](%gh-ic%/platform/indexing-api/src/com/intellij/util/indexing/FileBasedIndexExtension.java) registered via `com.intellij.fileBasedIndex` extension point.
 
@@ -58,33 +58,52 @@ Please see also [Improving indexing performance](indexing_and_psi_stubs.md#impro
 >
 > Please set system property `intellij.idea.indices.debug`/`intellij.idea.indices.debug.extra.sanity` to `true` to enable additional debugging assertions during development to assert correct index implementation.
 >
-{type="warning"}
+{style="warning"}
 
 ## Accessing a File-Based Index
 
 Access to file-based indexes is performed through the [`FileBasedIndex`](%gh-ic%/platform/indexing-api/src/com/intellij/util/indexing/FileBasedIndex.java) class.
 
-> Please note index access is restricted during [Dumb Mode](indexing_and_psi_stubs.md#dumb-mode).
+> Please note index access is restricted during [dumb mode](indexing_and_psi_stubs.md#dumb-mode).
 >
-{type="note"}
+{style="note"}
 
 The following primary operations are supported:
 
 * `getAllKeys()` and `processAllKeys()` allow obtaining the list of all keys found in files, which are a part of the specified project.
-  To optimize performance, consider returning `true` from `FileBasedIndexExtension.traceKeyHashToVirtualFileMapping()` (see javadoc for details).
+  To optimize performance, consider returning `true` from `FileBasedIndexExtension.traceKeyHashToVirtualFileMapping()` (see its Javadoc for details).
 
 > The returned data is guaranteed to contain all keys found in up-to-date project content, but may also include additional keys not currently found in the project.
 >
-{type="note"}
+{style="note"}
 
 * `getValues()` allows to get all values associated with a specific key but not the files in which they were found.
 * `getContainingFiles()` allows collecting all files in which a particular key was encountered.
 * `processValues()` allows iterating through all files in which a specific key was encountered and accessing the associated values simultaneously.
 
+### Nested Index Access
+
+When accessing index data in nested calls (usually from multiple indexes), limitations might apply.
+
+<tabs>
+
+<tab title="2023.1 and later">
+
+~~Nested index access is now possible.~~
+
+**NOTE: Please do not use yet** This is known to cause problems under certain conditions, please watch this [issue](https://youtrack.jetbrains.com/issue/IJPL-265/Nested-index-lookups-still-leads-to-deadlocks).
+
+</tab>
+
+<tab title="2022.3 and earlier">
+
 > Nested index access is forbidden as it might lead to a deadlock.
 > Collect all necessary data from index _A_ first, then process results while accessing index _B_.
 >
-{type="warning"}
+{style="warning"}
+
+</tab>
+</tabs>
 
 ## Standard Indexes
 

@@ -1,9 +1,16 @@
-[//]: # (title: Documentation)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Documentation
 
-[Quick Documentation](https://www.jetbrains.com/help/idea/viewing-reference-information.html#inline-quick-documentation)
-helps users by showing documentation, e.g., for classes, functions, or methods inside the editor.
+<tldr>
+
+**Product Help:** [Quick Documentation](https://www.jetbrains.com/help/idea/viewing-reference-information.html#inline-quick-documentation)
+
+</tldr>
+
+<link-summary>Documentation for code elements inside the editor.</link-summary>
+
+Quick Documentation helps users by showing documentation, e.g., for classes, functions, or methods inside the editor.
 Plugin authors implement
 [`DocumentationProvider`](%gh-ic%/platform/analysis-api/src/com/intellij/lang/documentation/DocumentationProvider.java)
 to show documentation for particular [PSI elements](psi_elements.md).
@@ -17,7 +24,7 @@ The bigger picture here is that documentation providers co-exist and if there is
 the first one that returns a value different from `null` wins.
 
 Although discouraged, the ordering of documentation providers can be influenced by using the `order` attribute when registering the extension.
-For instance, [`python-core-common.xml`](%gh-ic%/python/src/META-INF/python-core-common.xml) uses the following to call the external documentation
+For instance, PythonCore [`plugin.xml`](%gh-ic%/python/pluginCore/resources/META-INF/plugin.xml) uses the following to call the external documentation
 provider before the default one (registered with `id="pythonDocumentationProvider"`):
 
 ```xml

@@ -1,15 +1,17 @@
-[//]: # (title: Incompatible Changes in IntelliJ Platform and Plugins API 2022.*)
+<!-- Copyright 2000-2024 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
 
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+# Incompatible Changes in IntelliJ Platform and Plugins API 2022.*
 
 <!--
 Before documenting a breaking API change, please make sure that the change cannot be avoided in an alternative way.
 
-APIs marked with @Deprecated(forRemoval=true), @ApiStatus.Experimental, @ApiStatus.Internal, or @ApiStatus.ScheduledForRemoval don't need to be documented.
+APIs marked with @Deprecated(forRemoval=true), @ApiStatus.Experimental, @ApiStatus.Internal/IntellijInternalApi, or @ApiStatus.ScheduledForRemoval don't need to be documented.
 
-To document a new incompatible change, add a new line with the problem pattern followed by a 2nd line with ": "-prefixed human-readable description and recommended fix/action.
+To document a new incompatible change, add a new line with the problem pattern followed by a 2nd line with ": "-prefixed human-readable description
+and recommended fix/action (REQUIRED, please write full sentence ending with '.', see existing entries as reference).
+Non-platform changes must be grouped under relevant section for plugin.
 
-The following problem patterns are supported:
+The following problem patterns are supported and must be followed EXACTLY (e.g., no '#' instead of '.'):
 
 <package name> package removed
 
@@ -52,35 +54,68 @@ Where the placeholders must be enclosed in code quotes (`name`):
 <property name> is a full name of a property from .properties file, like `some.action.description`
 <bundle name> is a fully qualified name of the property bundle, which includes its package, like `message.IdeBundle`
 
-NOTE: If a code change you're trying to document doesn't match any of the above patterns, fill in a ticket in the YouTrack.
-An example of a ticket is https://youtrack.jetbrains.com/issue/MP-1218. Until supported, you may document the change as you prefer, and I will correct it later.
+NOTE: If a code change you're trying to document doesn't match any of the above patterns, please ask in #plugins-verifier
 
 NOTE: You are allowed to prettify the pattern using links: [`org.example.Foo`](https://github.com/JetBrains/intellij-community/tree/master/)
 
 NOTE: Entries not starting with code quotes (`name`) can be added to document non-code changes and will be skipped in API verification.
 -->
 
-Please see [](verifying_plugin_compatibility.md) on how to use Plugin Verifier and IDE inspections to check such problems.
+<link-summary>List of known Breaking API Changes in 2022.*</link-summary>
 
-> Changes from API marked with `@Deprecated(forRemoval=true)` or any of [`org.jetbrains.annotations.ApiStatus`](https://github.com/JetBrains/java-annotations/blob/master/common/src/main/java/org/jetbrains/annotations/ApiStatus.java) `@Experimental`, `@ScheduledForRemoval`, or `@Internal` are not listed here, as incompatible changes are to be expected.
->
-> For API annotated with `ApiStatus.@Internal`, see [](api_internal.md) for more details and replacements.
->
-{type="note"}
+<include from="snippets.md" element-id="apiChangesHeader"/>
 
-> Java 17 is required when targeting 2022.2 or later only.
->
-> Java 11 is required ([blog post](https://blog.jetbrains.com/platform/2020/09/intellij-project-migrates-to-java-11/)) when targeting 2020.3 and later only.
->
-> Please make sure to always upgrade `gradle-intellij-plugin` to the latest version [![GitHub Release](https://img.shields.io/github/release/jetbrains/gradle-intellij-plugin.svg?style=flat-square)](https://github.com/jetbrains/gradle-intellij-plugin/releases)
->
-{type="note"}
+<include from="snippets.md" element-id="apiChangesJavaVersion"/>
 
-_Early Access Program_ (EAP) releases of upcoming versions are available [here](https://eap.jetbrains.com).
+<include from="snippets.md" element-id="gradlePluginVersion"/>
 
 ## 2022.3
 
 ### IntelliJ Platform 2022.3
+
+`com.intellij.openapi.externalSystem.dependency.analyzer.DependencyAnalyzerExtension.isApplicable(ProjectSystemId)` abstract method added
+: Must be implemented.
+
+`com.intellij.openapi.externalSystem.dependency.analyzer.DependencyAnalyzerExtension.createContributor(Project, Disposable)` method parameter `ProjectSystemId` removed
+: Adjust your code.
+
+`com.intellij.openapi.externalSystem.dependency.analyzer.DependencyAnalyzerExtension.createContributor(Project, Disposable)` method return type changed from `DependencyAnalyzerContributor?` to `DependencyAnalyzerContributor`
+: Implement `isApplicable()` instead.
+
+`com.intellij.openapi.editor.EditorCopyPasteHelper.getSelectionTransferable(Editor editor, EditorCopyPasteHelper.CopyPasteOptions options)` abstract method added
+: Must be implemented instead of and preferred over `com.intellij.openapi.editor.EditorCopyPasteHelper.copySelectionToClipboard(Editor)` which now delegates to the new method.
+
+`com.intellij.codeInsight.template.TemplateContextType.EP_NAME` field removed
+: Use `com.intellij.codeInsight.template.impl.TemplateContextTypes` to get `TemplateContextType` extensions.
+
+`com.intellij.ide.actions.searcheverywhere.FoundItemDescriptor(I, int, int)` constructor removed
+: Use `FoundItemDescriptor(I, int)` instead.
+
+### Database Plugin 2022.3
+
+`com.intellij.database.dataSource.url.TypesRegistry.ParamEditor` class removed
+: Use `com.intellij.database.dataSource.url.TypeDescriptor.ParamEditor` instead.
+
+`com.intellij.database.dataSource.url.TypesRegistry.BaseTypeDescriptor.createFieldImpl(String caption, String configuration, DataInterchange interchange)` abstract method added
+: Must be implemented.
+
+`com.intellij.database.psi.DbDataSourceImpl.getDelegate()` method return type changed from `DatabaseSystem` to `RawDataSource`
+: Prefer `com.intellij.database.psi.DbDataSource.getDelegateDataSource()`.
+
+`com.intellij.database.psi.DbPsiFacadeImpl.createDataSourceWrapperElement(DasDataSource, DataSourceManager)` method parameter type changed from `DasDataSource` to `RawDataSource`
+: Avoid manually wrapping data sources.
+
+`com.intellij.database.vfs.DatabaseElementVirtualFileImpl.setBusy(boolean)` method removed
+: That method was an internal method.
+
+`com.intellij.database.util.TreePatternNode.Group(ObjectKind, TreePatternNode[], TreePatternNode)` constructor removed
+: Do not manipulate TreePatternNodes. Use `TreePatternUtils` to manipulate `TreePatterns`.
+
+`com.intellij.database.util.TreePatternNode.NegativeNaming(ObjectName[])` constructor removed
+: Do not manipulate TreePatternNodes. Use `TreePatternUtils` to manipulate `TreePatterns`.
+
+`com.intellij.database.dataSource.DataSourceConfigurable.getDataSource()` method return type changed from `DasDataSource` to `RawDataSource`
+: Stricter generic bound.
 
 ### TextMate Plugin 2022.3
 
@@ -119,6 +154,41 @@ _Early Access Program_ (EAP) releases of upcoming versions are available [here](
 
 `org.jetbrains.plugins.textmate.language.preferences.SnippetsRegistry()` constructor removed
 : Instantiate `org.jetbrains.plugins.textmate.language.preferences.SnippetsRegistryImpl()` instead.
+
+### HTTP Client Plugin 2022.3
+
+`com.intellij.httpClient.http.request.HttpRequestVariableSubstitutor` class now interface
+: Use `com.intellij.httpClient.http.request.HttpRequestVariableSubstitutorImpl.create(Project, HttpRequestEnvironment)` for constructing instances.
+
+### JavaScript Plugin 2022.3
+
+`com.intellij.lang.javascript.buildTools.webpack.WebPackConfigManager` class moved to package `com.intellij.webpack`
+: Use `com.intellij.webpack.WebpackConfigManager` instead.
+
+`com.intellij.lang.javascript.buildTools.webpack.WebPackConfigManager.Companion` class moved to package `com.intellij.webpack`
+: Use `com.intellij.webpack.WebpackConfigManager.Companion` instead.
+
+### Microservices Plugin 2022.3
+
+`com.intellij.microservices.url.inlay.UrlPathInlayAction.isAvailable(file: PsiFile, urlPathContext: UrlPathContext)` method parameter type changed from `com.intellij.microservices.url.references.UrlPathContext` to `com.intellij.microservices.url.inlay.UrlPathInlayHint`
+: Use `com.intellij.microservices.url.inlay.UrlPathInlayHint.getContext` to obtain corresponding `UrlPathContext` instance.
+
+### Remote Development Gateway Plugin 2022.3
+
+`com.jetbrains.gateway.ssh.SshMultistagePanelContext.getSshConfig()` method removed
+: Use `com.jetbrains.gateway.ssh.SshMultistagePanelContext.getConfig()` instead.
+
+`com.jetbrains.gateway.ssh.SshMultistagePanelContext.setSshConfig(SshConfig)` method removed
+: Use `com.jetbrains.gateway.ssh.SshMultistagePanelContext.setConfig(SshConfig)` instead.
+
+### YAML Plugin 2022.3
+
+org.jetbrains.yaml.YAMLParserDefinition no longer implements `org.jetbrains.yaml.YAMLElementTypes`.
+: Use `org.jetbrains.yaml.YAMLElementTypes` fields directly.
+
+### Terraform Plugin 2022.3
+
+Top level packages of Terraform `org.intellij.plugins.hcl` and `org.intellij.plugins.hil` moved to single `org.intellij.terraform`.
 
 ## 2022.2
 

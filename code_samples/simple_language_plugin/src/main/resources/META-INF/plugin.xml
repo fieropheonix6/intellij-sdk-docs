@@ -1,4 +1,4 @@
-<!-- Copyright 2000-2022 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file. -->
+<!-- Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 
 <idea-plugin>
@@ -6,14 +6,14 @@
   <!-- Unique id for this plugin. Must stay constant for the life of the plugin. -->
   <id>org.intellij.sdk.language</id>
 
-  <!-- Text to display as name on Preferences/Settings | Plugin page -->
+  <!-- Text to display as name on Settings | Plugin page -->
   <name>SDK: Simple Language Sample</name>
 
   <!-- Product and plugin compatibility requirements -->
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.java</depends>
 
-  <!-- Text to display as description on Preferences/Settings | Plugin page -->
+  <!-- Text to display as description on Settings | Plugin page -->
   <description>
     <![CDATA[
       Demonstrates how to add custom language support to an IntelliJ Platform-based IDE. <br>Defines a new language,
@@ -33,22 +33,16 @@
     ]]>
   </change-notes>
 
-  <!-- Text to display as company information on Preferences/Settings | Plugin page -->
+  <!-- Text to display as company information on Settings | Plugin page -->
   <vendor url="https://plugins.jetbrains.com">IntelliJ Platform SDK</vendor>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileType name="Simple File" implementationClass="org.intellij.sdk.language.SimpleFileType" fieldName="INSTANCE"
               language="Simple" extensions="simple"/>
-    <!--
-      Only required for versions of the IntelliJ Platform prior to v2019.2.
-      Use 'com.intellij.fileTypeFactory' extension point INSTEAD of above 'com.intellij.fileType'.
-      See https://plugins.jetbrains.com/docs/intellij/language-and-filetype.html#register-the-filetype for details.
-
-      <fileTypeFactory implementation="org.intellij.sdk.language.SimpleFileTypeFactory"/>
-    -->
     <lang.parserDefinition language="Simple" implementationClass="org.intellij.sdk.language.SimpleParserDefinition"/>
     <lang.syntaxHighlighterFactory language="Simple"
                                    implementationClass="org.intellij.sdk.language.SimpleSyntaxHighlighterFactory"/>
+    <iconProvider implementation="org.intellij.sdk.language.SimplePropertyIconProvider"/>
     <colorSettingsPage implementation="org.intellij.sdk.language.SimpleColorSettingsPage"/>
     <annotator language="JAVA" implementationClass="org.intellij.sdk.language.SimpleAnnotator"/>
     <codeInsight.lineMarkerProvider language="JAVA"
@@ -71,6 +65,7 @@
     <langCodeStyleSettingsProvider implementation="org.intellij.sdk.language.SimpleLanguageCodeStyleSettingsProvider"/>
     <lang.commenter language="Simple" implementationClass="org.intellij.sdk.language.SimpleCommenter"/>
     <lang.documentationProvider language="Simple" implementationClass="org.intellij.sdk.language.SimpleDocumentationProvider"/>
+    <spellchecker.support language="Simple" implementationClass="org.intellij.sdk.language.SimpleSpellcheckingStrategy"/>
   </extensions>
 
 </idea-plugin>
