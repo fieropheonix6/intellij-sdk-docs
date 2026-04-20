@@ -7,9 +7,9 @@
 
     <snippet id="missingContent">
         <note title="Something missing?">
-            <p>If a topic is not covered in the above sections, let us know via the
-                <control>Was this page helpful?</control>
-                feedback form below or <a href="getting_help.topic" anchor="problems-with-the-guide">other channels</a>.
+            <p>If a topic is not covered in the above sections,
+                let us know via the <control>Feedback</control> widget displayed on the right,
+                or <a href="getting_help.topic" anchor="problems-with-the-guide">other channels</a>.
             </p>
             <p>Be specific about the topics and reasons for adding them and leave your email in case we need
                 more details. Thanks for your feedback!</p>
