@@ -2,7 +2,7 @@
 
 <!-- GENERATED FILE, DO NOT EDIT -->
 <!-- This file is generated with the SDK Docs Authoring Tools plugin ('Generate SDK Docs EP Lists' action) -->
-<!-- Revision: 89c647576f1d2c99d8f3f6ce610b7f6d8ee6f17c -->
+<!-- Revision: a789291cd24dfb7e90417275b43b4f910ecfdf22 -->
 
 <!--
 EP List Directories:
@@ -311,7 +311,6 @@ EP List Directories:
 
 | Extension Point | Implementation |
 |-----------------|----------------|
-| <include from="snippets.topic" element-id="epLink"><var name="ep" value="cidr.radler.externalSymbolsProvider"/></include> | `RadExternalSymbolsProvider` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.clion.radler.core.inspections.headlessStartupExtension"/></include> ![Non-Dynamic][non-dynamic] | `RadHeadlessStartupExtension` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.clion.radler.junie.testRunner"/></include> | `TestRunner` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.clion.radler.radQuickFixHandler"/></include> ![Non-Dynamic][non-dynamic] | `RadQuickFixHandler` |
@@ -357,6 +356,7 @@ EP List Directories:
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.cmake.runnerStep"/></include> ![Non-Dynamic][non-dynamic] | `CMakeRunnerStep` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.cmake.toolWindowFocusContributor"/></include> | `CMakeToolWindowFocusContributor` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.cmake.workspace.enabledProfileInitializer"/></include> | `CMakeEnabledProfileInitializer` |
+| <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.cmake.workspace.listener"/></include> ![Deprecated][deprecated] ![Removal][removal] | `CMakeWorkspaceListenerSuspending` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="com.intellij.cmake.workspace.profileEnvironmentContributor"/></include> | `CMakeProfileEnvironmentContributor` |
 
 ### intellij.cmake.psi.xml

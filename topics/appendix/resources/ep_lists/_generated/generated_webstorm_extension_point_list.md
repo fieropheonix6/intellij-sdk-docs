@@ -2,7 +2,7 @@
 
 <!-- GENERATED FILE, DO NOT EDIT -->
 <!-- This file is generated with the SDK Docs Authoring Tools plugin ('Generate SDK Docs EP Lists' action) -->
-<!-- Revision: 89c647576f1d2c99d8f3f6ce610b7f6d8ee6f17c -->
+<!-- Revision: a789291cd24dfb7e90417275b43b4f910ecfdf22 -->
 
 <!--
 EP List Directories:
@@ -15,7 +15,7 @@ EP List Directories:
 
 <snippet id="content">
 
-86 Extension Points and 5 Listeners
+87 Extension Points and 5 Listeners
 
 <include from="snippets.topic" element-id="ep_list_legend"/>
 
@@ -116,6 +116,7 @@ EP List Directories:
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="JavaScript.jsDocCustomTagsHandler"/></include> ![Experimental][experimental] | `JSDocCustomTagsHandler` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="JavaScript.jsxImplementation"/></include> | `JSXImplementation` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="JavaScript.lang.templates"/></include> ![Project-Level][project-level] | [`Configurable`](%gh-ic%/platform/ide-core/src/com/intellij/openapi/options/Configurable.java) |
+| <include from="snippets.topic" element-id="epLink"><var name="ep" value="JavaScript.libraryVersionChecker"/></include> | `JSLibraryVersionChecker` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="JavaScript.minifiedFileIndexingProvider"/></include> ![Internal][internal] | `JSMinifiedFileIndexingProvider` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="JavaScript.moduleExportsProvider"/></include> | `JSModuleExportsProvider` |
 | <include from="snippets.topic" element-id="epLink"><var name="ep" value="JavaScript.moduleReferenceContributor"/></include> | `JSModuleReferenceContributor` |
